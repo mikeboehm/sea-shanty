@@ -20,6 +20,7 @@
   "homepage": "https://github.com/mikeboehm/sea-shanty#readme",
   "dependencies": {
     "express": "^4.16.4",
+    "node-mpv": "^1.4.3",
     "phatbeat": "^1.0.0"
   },
   "engines": {

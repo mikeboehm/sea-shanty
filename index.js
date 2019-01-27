@@ -1,12 +1,19 @@
 console.log('starting js app')
+let mpv = require('node-mpv');
 const express = require('express')
 const app = express()
 const port = 3000
-console.log('about to set up phatbeat')
+
+const mpvPlayer = new mpv({
+  "audio_only": true,
+  // 'ipc_command': '--input-ipc-server',
+  // "verbose": true,
+});
+
+mpvPlayer.volume(30)
 
 let phatbeat = require('phatbeat');
-let buttons = phatbeat.getButtonPins();
-console.log(buttons);
+// let buttons = phatbeat.getButtonPins();
 // /*
 // [ { pin: 29, name: 'FAST_FORWARD' },
 //   { pin: 31, name: 'PLAY_PAUSE' },
@@ -32,6 +39,10 @@ fastForwardStream.on("pinChange", function(pin, pinState){
 
 playPauseStream.on("pinChange", function(pin, pinState){
   console.log('playPauseStream', pin, pinState)
+  if(pinState === 1) {
+    mpvPlayer.append('http://9bs.svexican.me/')
+  }
+
   //pin is the pin number that has triggered the event
   //pin state is either 1 (pressed) or 0 (released)
 });
