@@ -2,11 +2,11 @@ console.log('starting js app')
 const express = require('express')
 const app = express()
 const port = 3000
-// console.log('about to set up phatbeat')
+console.log('about to set up phatbeat')
 
-// let phatbeat = require('phatbeat');
-// let buttons = phatbeat.getButtonPins();
-// console.log(buttons);
+let phatbeat = require('phatbeat');
+let buttons = phatbeat.getButtonPins();
+console.log(buttons);
 // /*
 // [ { pin: 29, name: 'FAST_FORWARD' },
 //   { pin: 31, name: 'PLAY_PAUSE' },
