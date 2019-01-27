@@ -19,7 +19,8 @@
   },
   "homepage": "https://github.com/mikeboehm/sea-shanty#readme",
   "dependencies": {
-    "express": "^4.16.4"
+    "express": "^4.16.4",
+    "phatbeat": "^1.0.0"
   },
   "engines": {
     "node": "10.15.0"
