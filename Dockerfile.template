@@ -15,8 +15,6 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
     gcc \
     g++ \
     mpv \
-		alsa-utils \
-    libasound2-dev \
     python-phatbeat \
     && rm -rf /var/lib/apt/lists/*
 
