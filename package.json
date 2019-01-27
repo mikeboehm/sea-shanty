@@ -1,14 +1,23 @@
 {
-  "name": "sea-shanty-clean-delete",
+  "name": "sea-shanty",
   "version": "1.0.0",
-  "description": "",
+  "description": "Sleep radio",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "watch": "nodemon --watch views -e js index.js",
+    "test": "jest tests/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mikeboehm/sea-shanty.git"
   },
   "author": "",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mikeboehm/sea-shanty/issues"
+  },
+  "homepage": "https://github.com/mikeboehm/sea-shanty#readme",
   "dependencies": {
     "express": "^4.16.4"
   }
