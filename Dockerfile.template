@@ -1,4 +1,4 @@
-FROM balenalib/raspberry-pi-node:10.15.0
+FROM balenalib/raspberry-pi-node:10.14.0
 
 # base-image for node on any machine using a template variable,
 # see more about dockerfile templates here: https://www.balena.io/docs/learn/develop/dockerfile/#dockerfile-templates
