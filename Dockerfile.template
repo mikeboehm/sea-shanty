@@ -9,7 +9,7 @@ FROM balenalib/raspberry-pi-node:10.14.0
 # use `install_packages` if you need to install dependencies,
 # for instance if you need git, just uncomment the line below.
 # RUN install_packages git
-RUN apt-get update && apt-get install gyp make
+RUN apt-get update && apt-get install build-essential
 
 # Defines our working directory in container
 WORKDIR /usr/src/app
