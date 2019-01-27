@@ -17,18 +17,18 @@ console.log(buttons);
 // */
 
 // //this attaches the monitoring to the underlying GPIO pin
-// let fastForwardStream = phatbeat.buttonStream(29);
+let fastForwardStream = phatbeat.buttonStream(29);
 // let playPauseStream = phatbeat.buttonStream(31);
 // let rewindStream = phatbeat.buttonStream(33);
 // let volUpStream = phatbeat.buttonStream(36);
 // let volDownStream = phatbeat.buttonStream(37);
 // let powerStream = phatbeat.buttonStream(32);
 
-// fastForwardStream.on("pinChange", function(pin, pinState){
-//   console.log('fastForwardStream', pin, pinState)
-//   //pin is the pin number that has triggered the event
-//   //pin state is either 1 (pressed) or 0 (released)
-// });
+fastForwardStream.on("pinChange", function(pin, pinState){
+  console.log('fastForwardStream', pin, pinState)
+  //pin is the pin number that has triggered the event
+  //pin state is either 1 (pressed) or 0 (released)
+});
 
 // playPauseStream.on("pinChange", function(pin, pinState){
 //   console.log('playPauseStream', pin, pinState)
