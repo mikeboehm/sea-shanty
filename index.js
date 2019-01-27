@@ -1,6 +1,8 @@
+console.log('starting js app')
 const express = require('express')
 const app = express()
 const port = 3000
+console.log('about to set up phatbeat')
 
 let phatbeat = require('phatbeat');
 let buttons = phatbeat.getButtonPins();
