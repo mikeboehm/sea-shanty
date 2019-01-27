@@ -40,6 +40,7 @@ fastForwardStream.on("pinChange", function(pin, pinState){
 playPauseStream.on("pinChange", function(pin, pinState){
   console.log('playPauseStream', pin, pinState)
   if(pinState === 1) {
+    console.log('PLAYING!')
     mpvPlayer.append('http://9bs.svexican.me/')
   }
 
