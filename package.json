@@ -20,5 +20,8 @@
   "homepage": "https://github.com/mikeboehm/sea-shanty#readme",
   "dependencies": {
     "express": "^4.16.4"
+  },
+  "engines": {
+    "node": "10"
   }
 }
