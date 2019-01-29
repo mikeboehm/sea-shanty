@@ -18,5 +18,10 @@ let phatbeat = require('phatbeat');
 const ss = new SeaShanty({phatbeat, mpvPlayer})
 
 app.get('/', (req, res) => res.json(ss.mpvState))
+app.get('/playpause', (req, res) => {
+  console.error('API: playpause')
+  ss.togglePause()
+  res.send(ss.mpvState)
+})
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
