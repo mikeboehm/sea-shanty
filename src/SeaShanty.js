@@ -141,6 +141,20 @@ class SeaShanty {
       }
     }.bind(this))
 
+    // Fast foward
+    this.phatbeat.buttonStream(29).on('pinChange', (pin, pinState) => {
+      if (pinState === 1) {
+        this.next()
+      }
+    })
+    
+    // Rewind
+    this.phatbeat.buttonStream(29).on('pinChange', (pin, pinState) => {
+      if (pinState === 1) {
+        this.prev()
+      }
+    })
+
     // Power button
     this.phatbeat.buttonStream(32).on('pinChange', function (pin, pinState) {
       if (pinState === 1) {
