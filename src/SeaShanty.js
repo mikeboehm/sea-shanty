@@ -267,7 +267,7 @@ class SeaShanty {
     setInterval(() => {
       if (startedAt) {
         const diff = moment().diff(startedAt)
-        const brightness = ((duration - diff) / duration * 1).toFixed(1)
+        const brightness = ((duration - diff) / duration * 1).toFixed(2)
 
         if (brightness >= 0.1) {
           setLeds(red, green, blue, redraw, brightness)
