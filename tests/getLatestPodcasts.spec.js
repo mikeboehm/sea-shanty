@@ -23,7 +23,7 @@ describe('It can get latest podcasts', () => {
     {
       name: 'Radiolab',
       feed: 'http://feeds.wnyc.org/radiolab'
-    },]
+    }]
 
     const response = await getLatestPodcasts(feeds)
 

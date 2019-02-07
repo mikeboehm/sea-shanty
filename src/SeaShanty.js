@@ -235,7 +235,7 @@ class SeaShanty {
 
   _diffObject (oldObj, newObj) {
     return Object.keys(oldObj)
-      .map(key => newObj[key] == oldObj[key] ? false : key)
+      .map(key => newObj[key] === oldObj[key] ? false : key)
       .filter(Boolean)
       .reduce((accumulator, key) => {
         accumulator[key] = {

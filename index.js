@@ -1,12 +1,12 @@
 'use strict'
 const SeaShanty = require('./src/SeaShanty')
 console.log('starting js app')
-let mpv = require('node-mpv')
+let MPV = require('node-mpv')
 const express = require('express')
 const app = express()
 const port = 3000
 
-const mpvPlayer = new mpv({
+const mpvPlayer = new MPV({
   'audio_only': true
   // 'ipc_command': '--input-ipc-server',
   // "verbose": true,
