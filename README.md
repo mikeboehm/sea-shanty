@@ -1,3 +1,34 @@
+# Sea Shanty
+
+## Podcasts
+The aim is to have a list of favourite podcasts that can be played easily
+Timer runs for 30 minutes, or end of the episode (whichever is sooner)
+If there is still time left from last night's, rewind 10 mins and play from there. Perhaps only if there is a total of 20 minutes left?
+
+### Feeds
+- Add a list of podcast feeds
+- Poll feeds to check for new episodes
+- Add new episodes to playlist
+
+### Playlist
+- Keeps track of new episodes
+- Remembers where it stopped last night
+- "Now Playing" should be the top of the playlist
+- New episodes are added after this one
+- If you skip an episode, skipped episodes remain for 48? hours?
+
+## How it works
+
+### Feed
+- Contains all tracks that have been published
+- New tracks are added to the list
+- Knows which ones have been completed
+
+### Playlist
+- knows the current track
+- has an ordered list of all incomplete tracks
+- Ideally, knows their playback position too
+
 
 ## Getting node-rpio to work
 ### Raspbian

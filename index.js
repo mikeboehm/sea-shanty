@@ -1,27 +1,57 @@
 'use strict'
 const SeaShanty = require('./src/SeaShanty')
 console.log('starting js app')
-let mpv = require('node-mpv');
+let mpv = require('node-mpv')
 const express = require('express')
 const app = express()
 const port = 3000
 
 const mpvPlayer = new mpv({
-  "audio_only": true,
+  'audio_only': true
   // 'ipc_command': '--input-ipc-server',
   // "verbose": true,
-});
+})
 mpvPlayer.volume(30)
 
-let phatbeat = require('phatbeat');
+let phatbeat = require('phatbeat')
 
-const ss = new SeaShanty({phatbeat, mpvPlayer})
+const ss = new SeaShanty({ phatbeat, mpvPlayer })
 
 app.get('/', (req, res) => res.json(ss.mpvState))
-app.get('/playpause', (req, res) => {
-  console.error('API: playpause')
+app.post('/playpause', (req, res) => {
+  console.log('API: play/pause')
   ss.togglePause()
   res.send(ss.mpvState)
 })
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+app.post('/volup', (req, res) => {
+  console.log('API: volume up')
+  ss.volumeUp()
+  res.send(ss.mpvState)
+})
+
+app.post('/voldown', (req, res) => {
+  console.log('API: volume down')
+  ss.volumeDown()
+  res.send(ss.mpvState)
+})
+
+app.post('/next', (req, res) => {
+  console.log('API: next')
+  ss.next()
+  res.send(ss.mpvState)
+})
+
+app.post('/prev', (req, res) => {
+  console.log('API: prev')
+  ss.prev()
+  res.send(ss.mpvState)
+})
+
+app.post('/power', (req, res) => {
+  console.log('API: power')
+  ss.power()
+  res.send(ss.mpvState)
+})
+
+app.listen(port, () => console.log(`Sea Shanty app listening on port ${port}!`))
