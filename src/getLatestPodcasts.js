@@ -43,7 +43,6 @@ const getLatestPodcasts = async (feeds) => {
   const episodes = await Promise.all(requests)
     .then(responses => {
       return Promise.all(responses.map(feedXml => parseFeed(feedXml)))
-      responses.forEach(feedXml => parseFeed(feedXml))
     }).then(parsedFeeds => [].concat.apply([], parsedFeeds))
 
   return episodes.sort(sortByNewestFirst)

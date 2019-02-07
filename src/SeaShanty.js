@@ -10,15 +10,19 @@ http://9bs.svexican.me/
 http://9bs.svexican.me/
 `
 
-const TIMER_MS = 18000
+// const TIMER_MINUTES = 0.5
+const TIMER_MINUTES = 20
+const TIMER_MS = TIMER_MINUTES * 60 * 1000
 const VOLUME_INCREMENT = 2
 
 class SeaShanty {
-  constructor ({ mpvPlayer, phatbeat }) {
+  constructor ({ mpvPlayer, phatbeat, playlist }) {
+
     this.volume = 30
     this.timeoutId = undefined
     this.mpvPlayer = mpvPlayer
     this.phatbeat = phatbeat
+    this.playlist = playlist
     this.mpvState = {
       mute: false,
       pause: null,
@@ -40,7 +44,7 @@ class SeaShanty {
     this.loadHandlers()
 
     // this.mpvPlayer.append('http://9bs.svexican.me/')
-    this.mpvPlayer.append('https://notificationsounds.com/soundfiles/dd458505749b2941217ddd59394240e8/file-sounds-1111-to-the-point.mp3')
+    // this.mpvPlayer.append('https://notificationsounds.com/soundfiles/dd458505749b2941217ddd59394240e8/file-sounds-1111-to-the-point.mp3')
 
     /* This is supposed to print how much time is left. Would be useful for visual countdown timer */
     // function getTimeLeft(timeout) {
@@ -66,14 +70,16 @@ class SeaShanty {
 
   play () {
     this.log('PLAY ' + this.filename)
-    this.timeoutId = setTimeout(function () {
+    this.timeoutId = setTimeout(() => {
       this.log('TIMES UP! PAUSING')
       this.pause()
-    }.bind(this), TIMER_MS)
+    }, TIMER_MS)
 
     // This is supposed to load the next song if it ran out of things to play
     if (this.mpvState['playlist-pos'] === null) {
-      his.mpvPlayer.append('https://notificationsounds.com/soundfiles/8b16ebc056e613024c057be590b542eb/file-sounds-1113-unconvinced.mp3')
+      const url = this.playlist.shift().url
+      console.error('url', url)
+      this.mpvPlayer.load(url)
     } else {
       this.mpvPlayer.play()
     }
@@ -88,7 +94,9 @@ class SeaShanty {
   _logIfDifferent (key, value) {
     const existingValue = this.mpvState[key]
     const paddingValue = '              '
-    if (existingValue !== value) this.log(`${String(key + paddingValue).slice(0, paddingValue.length)} from: ${existingValue} to: ${value}`)
+    if (typeof existingValue !== 'undefined' && existingValue !== value) {
+      this.log(`${String(key + paddingValue).slice(0, paddingValue.length)} from: ${existingValue} to: ${value}`)
+    }
   }
 
   _filterEvents (status, excludes = []) {
@@ -168,7 +176,7 @@ class SeaShanty {
     this.setLEDColourRecursive(15)
   }
 
-  _setLEDColourRecursive (ledInt) {
+  _setLEDColourRecursive (ledInt, delay) {
     this.phatbeat.changeSingleLED(ledInt, ledInt % 2 === 0 ? 255 : 0, 0, ledInt % 2 > 0 ? 255 : 0, brightness, true)
     setTimeout(function () {
       this.phatbeat.turnOffAllLEDs(true)
@@ -179,7 +187,7 @@ class SeaShanty {
       if (currentLoop <= maxLoops) {
         newLed = currentLoop % 2 === 0 ? ++ledInt : --ledInt
 
-        this._setLEDColourRecursive(newLed)
+        this._setLEDColourRecursive(newLed, delay)
       } else {
         this.phatbeat.teardown(false)
       }
