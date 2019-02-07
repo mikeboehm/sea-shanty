@@ -37,28 +37,18 @@ class SeaShanty {
 
     this.setVolume(this.volume)
 
-    // this.mpvPlayer.pause()
-    // this.mpvPlayer.play()
+    // the init_led function sets up the appropriate GPIO pins
+    // optional parameter of brightness of leds, this is a decimal between 0.1 and 1.0
+    this.phatbeat.init_led(0.1)
+    const red = 255
+    const green = 0
+    const blue = 0
+    const redraw = true
+    const brightness = 0.1
+    this.phatbeat.changeAllLEDs(red, green, blue, redraw, brightness)
 
     this.loadHandlers()
 
-    // this.mpvPlayer.append('http://9bs.svexican.me/')
-    // this.mpvPlayer.append('https://notificationsounds.com/soundfiles/dd458505749b2941217ddd59394240e8/file-sounds-1111-to-the-point.mp3')
-
-    /* This is supposed to print how much time is left. Would be useful for visual countdown timer */
-    // function getTimeLeft(timeout) {
-    //   return Math.ceil((timeout._idleStart + timeout._idleTimeout - Date.now()) / 1000);
-    // }
-
-    // setInterval(() => {
-    //   if(typeof this.timeoutId !== 'undefined') {
-    //     this.log('timeout._idleStart', this.timeoutId._idleStart)
-    //     this.log('timeout._idleTimeout', this.timeoutId._idleTimeout)
-    //     this.log('Time left: '+getTimeLeft(this.timeoutId)+'s');
-    //   } else {
-    //     this.log('No timeout running')
-    //   }
-    // }, 2000);
     this.log('READY!')
   }
 
@@ -69,10 +59,19 @@ class SeaShanty {
 
   play () {
     this.log('PLAY ' + this.filename)
-    this.timeoutId = setTimeout(() => {
-      this.log('TIMES UP! PAUSING')
-      this.pause()
-    }, TIMER_MS)
+    // this.timeoutId = setTimeout(() => {
+    //   this.log('TIMES UP! PAUSING')
+    //   this.pause()
+    // }, TIMER_MS)
+
+    this._startTimer(
+      [
+        this.pause.bind(this),
+        this.phatbeat.turnOffAllLEDs.bind(this.phatbeat),
+        this.phatbeat.redraw.bind(this.phatbeat)
+      ],
+      this.phatbeat.changeAllLEDs.bind(this.phatbeat)
+    )
 
     // This is supposed to load the next song if it ran out of things to play
     if (this.mpvState['playlist-pos'] === null) {
@@ -103,21 +102,6 @@ class SeaShanty {
   }
 
   loadHandlers () {
-    //the init_led function sets up the appropriate GPIO pins
-    //optional parameter of brightness of leds, this is a decimal between 0.1 and 1.0
-    this.phatbeat.init_led(0.1);
-
-    //changes every LED to the same colour / settings
-    //method signature takes in RGB colour values
-    //boolean paramter states whether or not the changes made should be redrawn immediately or staged
-    //final parameter is optional for new brightness value, the previous value will be retained if not
-    const red = 255
-    const green = 0
-    const blue = 0
-    const redraw = true
-    const brightness = 0.1
-    this.phatbeat.changeAllLEDs(red, green, blue, redraw, brightness)
-
     this.mpvPlayer.on('statuschange', function (status) {
       status = { ...status }
       // this.log('MPV STATUSCHANGE', new Date(), status);
@@ -170,39 +154,39 @@ class SeaShanty {
         // console.error(red, green, blue)
         // this.phatbeat.changeAllLEDs(red, green, blue, redraw, changeBrightness)
 
-        this.cycleLeds()
+        // this.cycleLeds()
       }
-    }.bind(this))
+    })
   }
 
-  cycleLeds () {
-    // let maxLoops = 5
-    // let currentLoop = 0
-    // must be between 0.1 and 1.0
-    // let brightness = 1.0
-    // let delay = 100
+  // cycleLeds () {
+  //   // let maxLoops = 5
+  //   // let currentLoop = 0
+  //   // must be between 0.1 and 1.0
+  //   // let brightness = 1.0
+  //   // let delay = 100
 
-    this.phatbeat.init_led()
-    this._setLEDColourRecursive(15)
-  }
+  //   this.phatbeat.init_led()
+  //   this._setLEDColourRecursive(15)
+  // }
 
-  _setLEDColourRecursive (ledInt, delay) {
-    this.phatbeat.changeSingleLED(ledInt, ledInt % 2 === 0 ? 255 : 0, 0, ledInt % 2 > 0 ? 255 : 0, brightness, true)
-    setTimeout(function () {
-      this.phatbeat.turnOffAllLEDs(true)
-      let newLed
-      if (ledInt === 0 || ledInt === 15) {
-        currentLoop++
-      }
-      if (currentLoop <= maxLoops) {
-        newLed = currentLoop % 2 === 0 ? ++ledInt : --ledInt
+  // _setLEDColourRecursive (ledInt, delay) {
+  //   this.phatbeat.changeSingleLED(ledInt, ledInt % 2 === 0 ? 255 : 0, 0, ledInt % 2 > 0 ? 255 : 0, brightness, true)
+  //   setTimeout(function () {
+  //     this.phatbeat.turnOffAllLEDs(true)
+  //     let newLed
+  //     if (ledInt === 0 || ledInt === 15) {
+  //       currentLoop++
+  //     }
+  //     if (currentLoop <= maxLoops) {
+  //       newLed = currentLoop % 2 === 0 ? ++ledInt : --ledInt
 
-        this._setLEDColourRecursive(newLed, delay)
-      } else {
-        this.phatbeat.teardown(false)
-      }
-    }, delay)
-  }
+  //       this._setLEDColourRecursive(newLed, delay)
+  //     } else {
+  //       this.phatbeat.teardown(false)
+  //     }
+  //   }, delay)
+  // }
 
   log (...args) {
     const now = moment().format('H:M:ss')
@@ -255,6 +239,42 @@ class SeaShanty {
 
   getVolume () {
     return this.volume
+  }
+
+  _startTimer (timeoutCallbacks = [], setLeds) {
+    let startedAt = null
+    let brightness = 1
+    const red = 255
+    const green = 0
+    const blue = 0
+    const redraw = true
+
+    setLeds(red, green, blue, redraw, brightness)
+
+    // const duration = 5 * 1000
+    const duration = TIMER_MS
+
+    setTimeout(() => {
+      console.error('timeout finished')
+      startedAt = false
+      timeoutCallbacks.forEach(callback => {
+        callback()
+      })
+    }, duration)
+
+    startedAt = moment()
+
+    setInterval(() => {
+      if (startedAt) {
+        const diff = moment().diff(startedAt)
+        const brightness = ((duration - diff) / duration * 1).toFixed(1)
+
+        if (brightness >= 0.1) {
+          setLeds(red, green, blue, redraw, brightness)
+          console.error(brightness)
+        }
+      }
+    }, duration / 200)
   }
 
   _diffObject (oldObj, newObj) {
