@@ -40,12 +40,13 @@ class SeaShanty {
     // the init_led function sets up the appropriate GPIO pins
     // optional parameter of brightness of leds, this is a decimal between 0.1 and 1.0
     this.phatbeat.init_led(0.1)
-    const red = 255
-    const green = 0
-    const blue = 0
-    const redraw = true
-    const brightness = 0.1
-    this.phatbeat.changeAllLEDs(red, green, blue, redraw, brightness)
+    // const red = 255
+    // const green = 0
+    // const blue = 0
+    // const redraw = true
+    // const brightness = 0.1
+    // this.phatbeat.changeAllLEDs(red, green, blue, redraw, brightness)
+    this.phatbeat.turnOffAllLEDs(true)
 
     this.loadHandlers()
 
@@ -70,7 +71,7 @@ class SeaShanty {
         this.phatbeat.turnOffAllLEDs.bind(this.phatbeat),
         this.phatbeat.redraw.bind(this.phatbeat)
       ],
-      this.phatbeat.changeAllLEDs.bind(this.phatbeat)
+      this.phatbeat.changeSingleLED.bind(this.phatbeat)
     )
 
     // This is supposed to load the next song if it ran out of things to play
@@ -270,7 +271,7 @@ class SeaShanty {
         const brightness = ((duration - diff) / duration * 1).toFixed(2)
 
         if (brightness >= 0.1) {
-          setLeds(red, green, blue, redraw, brightness)
+          setLeds(red, green, blue, 0, 0, redraw, brightness)
           console.error(brightness)
         }
       }
