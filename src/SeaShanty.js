@@ -1,14 +1,14 @@
 'use strict'
 const moment = require('moment')
-const STREAM_URL = 'http://9bs.svexican.me/'
+// const STREAM_URL = 'http://9bs.svexican.me/'
 
-const playlist = `
-#EXTM3U
-#EXTINF:0,9BeetStretch
-http://9bs.svexican.me/
-#EXTINF:0,9BeetStretch
-http://9bs.svexican.me/
-`
+// const playlist = `
+// #EXTM3U
+// #EXTINF:0,9BeetStretch
+// http://9bs.svexican.me/
+// #EXTINF:0,9BeetStretch
+// http://9bs.svexican.me/
+// `
 
 // const TIMER_MINUTES = 0.5
 const TIMER_MINUTES = 20
@@ -17,7 +17,6 @@ const VOLUME_INCREMENT = 2
 
 class SeaShanty {
   constructor ({ mpvPlayer, phatbeat, playlist }) {
-
     this.volume = 30
     this.timeoutId = undefined
     this.mpvPlayer = mpvPlayer
@@ -104,6 +103,21 @@ class SeaShanty {
   }
 
   loadHandlers () {
+    //the init_led function sets up the appropriate GPIO pins
+    //optional parameter of brightness of leds, this is a decimal between 0.1 and 1.0
+    this.phatbeat.init_led(0.1);
+
+    //changes every LED to the same colour / settings
+    //method signature takes in RGB colour values
+    //boolean paramter states whether or not the changes made should be redrawn immediately or staged
+    //final parameter is optional for new brightness value, the previous value will be retained if not
+    const red = 255
+    const green = 0
+    const blue = 0
+    const redraw = true
+    const brightness = 0.1
+    this.phatbeat.changeAllLEDs(red, green, blue, redraw, brightness)
+
     this.mpvPlayer.on('statuschange', function (status) {
       status = { ...status }
       // this.log('MPV STATUSCHANGE', new Date(), status);
@@ -162,14 +176,14 @@ class SeaShanty {
   }
 
   cycleLeds () {
-    let maxLoops = 5
-    let currentLoop = 0
+    // let maxLoops = 5
+    // let currentLoop = 0
     // must be between 0.1 and 1.0
-    let brightness = 1.0
-    let delay = 100
+    // let brightness = 1.0
+    // let delay = 100
 
     this.phatbeat.init_led()
-    this.setLEDColourRecursive(15)
+    this._setLEDColourRecursive(15)
   }
 
   _setLEDColourRecursive (ledInt, delay) {
@@ -204,7 +218,7 @@ class SeaShanty {
     this.mpvPlayer.prev()
   }
 
-  _playNext() {
+  _playNext () {
     const url = this.playlist.shift().url
     console.error('url', url)
     this.mpvPlayer.load(url)
