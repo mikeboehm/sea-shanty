@@ -285,7 +285,7 @@ class SeaShanty {
         const brightness = ((duration - diff) / duration * 1).toFixed(2)
 
         if (brightness >= 0.1) {
-          setLeds(red, green, blue, 0, 0, redraw, brightness)
+          setLeds(red, green, blue, 0, redraw, brightness)
           console.error(brightness)
         }
       }
