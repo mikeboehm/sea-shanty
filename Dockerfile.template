@@ -18,7 +18,7 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-RUN curl https://get.pimoroni.com/phatbeat | bash
+# RUN curl https://get.pimoroni.com/phatbeat | bash
 
 # Defines our working directory in container
 WORKDIR /usr/src/app
