@@ -77,9 +77,7 @@ class SeaShanty {
 
     // This is supposed to load the next song if it ran out of things to play
     if (this.mpvState['playlist-pos'] === null) {
-      const url = this.playlist.shift().url
-      console.error('url', url)
-      this.mpvPlayer.load(url)
+      this._playNext()
     } else {
       this.mpvPlayer.play()
     }
@@ -132,8 +130,6 @@ class SeaShanty {
       }
     }.bind(this))
 
-    // this.volumeUpStream = phatbeat.buttonStream(36);
-    // this.volumeUpStream.on("pinChange", function(pin, pinState){
     this.phatbeat.buttonStream(36).on('pinChange', function (pin, pinState) {
       if (pinState === 1) {
         this.volumeUp()
@@ -208,9 +204,15 @@ class SeaShanty {
     this.mpvPlayer.prev()
   }
 
+  _playNext() {
+    const url = this.playlist.shift().url
+    console.error('url', url)
+    this.mpvPlayer.load(url)
+  }
+
   next () {
     this.log('NEXT')
-    this.mpvPlayer.next()
+    this._playNext()
   }
 
   volumeUp () {
