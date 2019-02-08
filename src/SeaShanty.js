@@ -1,14 +1,5 @@
 'use strict'
 const moment = require('moment')
-// const STREAM_URL = 'http://9bs.svexican.me/'
-
-// const playlist = `
-// #EXTM3U
-// #EXTINF:0,9BeetStretch
-// http://9bs.svexican.me/
-// #EXTINF:0,9BeetStretch
-// http://9bs.svexican.me/
-// `
 
 // const TIMER_MINUTES = 0.5
 const TIMER_MINUTES = 20
@@ -40,12 +31,6 @@ class SeaShanty {
     // the init_led function sets up the appropriate GPIO pins
     // optional parameter of brightness of leds, this is a decimal between 0.1 and 1.0
     this.phatbeat.init_led(0.1)
-    // const red = 255
-    // const green = 0
-    // const blue = 0
-    // const redraw = true
-    // const brightness = 0.1
-    // this.phatbeat.changeAllLEDs(red, green, blue, redraw, brightness)
     this.phatbeat.turnOffAllLEDs(true)
 
     this.loadHandlers()
@@ -60,10 +45,6 @@ class SeaShanty {
 
   play () {
     this.log('PLAY ' + this.filename)
-    // this.timeoutId = setTimeout(() => {
-    //   this.log('TIMES UP! PAUSING')
-    //   this.pause()
-    // }, TIMER_MS)
 
     this._startTimer(
       [
@@ -126,85 +107,88 @@ class SeaShanty {
       this.log('STOPPED')
     })
 
-    this.playPauseStream = this.phatbeat.buttonStream(31).on('pinChange', (pin, pinState) => {
-      if (pinState === 1) {
-        this.togglePause()
-      }
+    const setup = [
+      {
+        name: 'Toggle Pause',
+        pin: 31,
+        handler: this.togglePause.bind(this)
+      },
+      {
+        name: 'Volume Up',
+        pin: 36,
+        handler: this.volumeUp.bind(this)
+      },
+      {
+        name: 'Volume Down',
+        pin: 37,
+        handler: this.volumeDown.bind(this)
+      },
+      {
+        name: 'Fast Forward',
+        pin: 29,
+        handler: this.next.bind(this)
+      },
+      {
+        name: 'Rewind',
+        pin: 33,
+        handler: this.prev.bind(this)
+      },
+      {
+        name: 'Power',
+        pin: 32,
+        handler: this.power.bind(this)
+      },
+    ]
+
+    setup.forEach(buttonStreamConfig => {
+      const { pin, handler } = buttonStreamConfig
+      this.phatbeat.buttonStream(pin).on('pinChange', (pin, pinState) => {
+        if (pinState === 1) {
+          handler()
+        }
+      })
     })
 
-    this.phatbeat.buttonStream(36).on('pinChange', (pin, pinState) => {
-      if (pinState === 1) {
-        this.volumeUp()
-      }
-    })
+    // this.playPauseStream = this.phatbeat.buttonStream(31).on('pinChange', (pin, pinState) => {
+    //   if (pinState === 1) {
+    //     this.togglePause()
+    //   }
+    // })
 
-    this.phatbeat.buttonStream(37).on('pinChange', (pin, pinState) => {
-      if (pinState === 1) {
-        this.volumeDown()
-      }
-    })
+    // // Volume up
+    // this.phatbeat.buttonStream(36).on('pinChange', (pin, pinState) => {
+    //   if (pinState === 1) {
+    //     this.volumeUp()
+    //   }
+    // })
 
-    // Fast foward
-    this.phatbeat.buttonStream(29).on('pinChange', (pin, pinState) => {
-      if (pinState === 1) {
-        this.next()
-      }
-    })
+    // // Volume Down
+    // this.phatbeat.buttonStream(37).on('pinChange', (pin, pinState) => {
+    //   if (pinState === 1) {
+    //     this.volumeDown()
+    //   }
+    // })
 
-    // Rewind
-    this.phatbeat.buttonStream(33).on('pinChange', (pin, pinState) => {
-      if (pinState === 1) {
-        this.prev()
-      }
-    })
+    // // Fast foward
+    // this.phatbeat.buttonStream(29).on('pinChange', (pin, pinState) => {
+    //   if (pinState === 1) {
+    //     this.next()
+    //   }
+    // })
 
-    // Power button
-    this.phatbeat.buttonStream(32).on('pinChange', function (pin, pinState) {
-      if (pinState === 1) {
-        // this.phatbeat.init_led(0.8)
+    // // Rewind
+    // this.phatbeat.buttonStream(33).on('pinChange', (pin, pinState) => {
+    //   if (pinState === 1) {
+    //     this.prev()
+    //   }
+    // })
 
-        // const red = Math.floor(Math.random() * 256)
-        // const green = Math.floor(Math.random() * 256)
-        // const blue = Math.floor(Math.random() * 256)
-        // // const channel = Math.floor(Math.random() * 2)
-        // const redraw = true
-        // const changeBrightness = 0.8
-        // console.error(red, green, blue)
-        // this.phatbeat.changeAllLEDs(red, green, blue, redraw, changeBrightness)
-
-        // this.cycleLeds()
-      }
-    })
+    // // Power button
+    // this.phatbeat.buttonStream(32).on('pinChange', (pin, pinState) => {
+    //   if (pinState === 1) {
+    //   }
+    // })
   }
-
-  // cycleLeds () {
-  //   // let maxLoops = 5
-  //   // let currentLoop = 0
-  //   // must be between 0.1 and 1.0
-  //   // let brightness = 1.0
-  //   // let delay = 100
-
-  //   this.phatbeat.init_led()
-  //   this._setLEDColourRecursive(15)
-  // }
-
-  // _setLEDColourRecursive (ledInt, delay) {
-  //   this.phatbeat.changeSingleLED(ledInt, ledInt % 2 === 0 ? 255 : 0, 0, ledInt % 2 > 0 ? 255 : 0, brightness, true)
-  //   setTimeout(function () {
-  //     this.phatbeat.turnOffAllLEDs(true)
-  //     let newLed
-  //     if (ledInt === 0 || ledInt === 15) {
-  //       currentLoop++
-  //     }
-  //     if (currentLoop <= maxLoops) {
-  //       newLed = currentLoop % 2 === 0 ? ++ledInt : --ledInt
-
-  //       this._setLEDColourRecursive(newLed, delay)
-  //     } else {
-  //       this.phatbeat.teardown(false)
-  //     }
-  //   }, delay)
-  // }
 
   log (...args) {
     const now = moment().format('H:M:ss')
@@ -215,6 +199,10 @@ class SeaShanty {
     return this.mpvState.filename
   }
 
+  power() {
+    this.log('POWER BUTTON')
+  }
+
   prev () {
     this.log('PREV')
     this.mpvPlayer.prev()
@@ -222,7 +210,6 @@ class SeaShanty {
 
   _playNext () {
     const url = this.playlist.shift().url
-    console.error('url', url)
     this.mpvPlayer.load(url)
   }
 
@@ -244,6 +231,10 @@ class SeaShanty {
   }
 
   isPlaying () {
+    if(this.mpvState.pause === null) {
+      return false
+    }
+    
     return this.mpvState.pause === false
   }
 
