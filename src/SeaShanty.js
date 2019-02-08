@@ -103,43 +103,40 @@ class SeaShanty {
   }
 
   loadHandlers () {
-    this.mpvPlayer.on('statuschange', function (status) {
+    this.mpvPlayer.on('statuschange', status => {
       status = { ...status }
       // this.log('MPV STATUSCHANGE', new Date(), status);
 
       this._filterEvents(status, ['duration'])
         .forEach((key) => this._logIfDifferent(key, status[key]))
 
-      // const diff = this._diffObject(this.mpvState, status)
-      // this.log('STATUS DIFF')
-      // this.log(JSON.stringify(diff, null, 2))
-
+      
       this.mpvState = status
-    }.bind(this))
+    })
 
     // This occurs when it runs out of music
     // Presumably this doesn't happen when
-    this.mpvPlayer.on('stopped', function () {
+    this.mpvPlayer.on('stopped', () => {
       this.log('STOPPED')
-    }.bind(this))
+    })
 
-    this.playPauseStream = this.phatbeat.buttonStream(31).on('pinChange', function (pin, pinState) {
+    this.playPauseStream = this.phatbeat.buttonStream(31).on('pinChange', (pin, pinState) => {
       if (pinState === 1) {
         this.togglePause()
       }
-    }.bind(this))
+    })
 
-    this.phatbeat.buttonStream(36).on('pinChange', function (pin, pinState) {
+    this.phatbeat.buttonStream(36).on('pinChange', (pin, pinState) => {
       if (pinState === 1) {
         this.volumeUp()
       }
-    }.bind(this))
+    })
 
-    this.phatbeat.buttonStream(37).on('pinChange', function (pin, pinState) {
+    this.phatbeat.buttonStream(37).on('pinChange', (pin, pinState) => {
       if (pinState === 1) {
         this.volumeDown()
       }
-    }.bind(this))
+    })
 
     // Fast foward
     this.phatbeat.buttonStream(29).on('pinChange', (pin, pinState) => {
@@ -147,9 +144,9 @@ class SeaShanty {
         this.next()
       }
     })
-    
+
     // Rewind
-    this.phatbeat.buttonStream(29).on('pinChange', (pin, pinState) => {
+    this.phatbeat.buttonStream(33).on('pinChange', (pin, pinState) => {
       if (pinState === 1) {
         this.prev()
       }
