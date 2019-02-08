@@ -84,7 +84,13 @@ class SeaShanty {
 
   pause () {
     this.log('PAUSE')
+    
+    // Clear timers
     clearTimeout(this.timeoutId)
+    this.timeoutId = false
+    clearInterval(this.intervalId)
+    this.intervalId = false
+    
     this.mpvPlayer.pause()
   }
 
@@ -261,29 +267,33 @@ class SeaShanty {
     const blue = 0
     const redraw = true
 
-    setLeds(red, green, blue, redraw, brightness)
+    setLeds(0, red, green, blue, redraw, brightness)
 
     // const duration = 5 * 1000
     const duration = TIMER_MS
 
-    setTimeout(() => {
+    this.timeoutId = setTimeout(() => {
       console.error('timeout finished')
       startedAt = false
       timeoutCallbacks.forEach(callback => {
         callback()
       })
+      this.timeoutId = false
+      this.intervalId = false
     }, duration)
 
     startedAt = moment()
 
-    setInterval(() => {
+    this.intervalId = setInterval(() => {
       if (startedAt) {
+        
         const diff = moment().diff(startedAt)
         const brightness = ((duration - diff) / duration * 1).toFixed(2)
 
-        if (brightness >= 0.1) {
+        if (brightness >= 0.1) {          
           setLeds(0, red, green, blue, redraw, brightness)
-          console.error(brightness)
+
+          console.error('Brightness: ', brightness)
         }
       }
     }, duration / 200)
