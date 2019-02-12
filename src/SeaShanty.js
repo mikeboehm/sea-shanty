@@ -67,6 +67,7 @@ class SeaShanty {
     this.intervalId = false
 
     this.mpvPlayer.pause()
+    this.playTimer.stop()
   }
 
   _logIfDifferent (key, value) {
