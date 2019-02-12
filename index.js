@@ -7,7 +7,7 @@ const getLatestPodcasts = require('./src/getLatestPodcasts')
 const express = require('express')
 const app = express()
 const port = 3000
-const Timer = require('Timer')
+const Timer = require('./src/Timer')
 
 const TIMER_MINUTES = 20
 const TIMER_MS = TIMER_MINUTES * 60 * 1000
