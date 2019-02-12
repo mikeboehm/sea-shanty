@@ -57,15 +57,16 @@ describe('Timer', () => {
       const duration = 100
       const timer = new Timer(duration)
       let ticks = 0
-
+      let count
       timer.on('tick', (data) => {
         ticks++
-        // expect(data.percent).toBe(percent)
+        count = data.count
       })
 
       timer.on('time-up', (data) => {
         // We just want to make sure it has happened a bunch of times
         expect(ticks).toBeGreaterThan(10)
+        expect(ticks).toEqual(count)
         done()
       })
 

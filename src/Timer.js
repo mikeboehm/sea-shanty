@@ -1,5 +1,7 @@
 'use strict'
 
+const moment = require('moment')
+
 const { EventEmitter } = require('events')
 
 class Timer extends EventEmitter {
@@ -15,8 +17,15 @@ class Timer extends EventEmitter {
       this.emit('time-up', {})
     }, this.duration)
 
+    let count = 1
+    let startedAt = moment()
     this.intervalId = setInterval(() => {
-      this.emit('tick', {})
+      this.emit('tick', {
+        startedAt,
+        duration: this.duration,
+        count
+      })
+      count++
     }, this.duration / 200)
   }
 
