@@ -65,13 +65,13 @@ class SeaShanty {
 
   pause () {
     this.log('PAUSE')
-    
+
     // Clear timers
     clearTimeout(this.timeoutId)
     this.timeoutId = false
     clearInterval(this.intervalId)
     this.intervalId = false
-    
+
     this.mpvPlayer.pause()
   }
 
@@ -97,7 +97,6 @@ class SeaShanty {
       this._filterEvents(status, ['duration'])
         .forEach((key) => this._logIfDifferent(key, status[key]))
 
-      
       this.mpvState = status
     })
 
@@ -137,7 +136,7 @@ class SeaShanty {
         name: 'Power',
         pin: 32,
         handler: this.power.bind(this)
-      },
+      }
     ]
 
     setup.forEach(buttonStreamConfig => {
@@ -148,46 +147,6 @@ class SeaShanty {
         }
       })
     })
-
-    // this.playPauseStream = this.phatbeat.buttonStream(31).on('pinChange', (pin, pinState) => {
-    //   if (pinState === 1) {
-    //     this.togglePause()
-    //   }
-    // })
-
-    // // Volume up
-    // this.phatbeat.buttonStream(36).on('pinChange', (pin, pinState) => {
-    //   if (pinState === 1) {
-    //     this.volumeUp()
-    //   }
-    // })
-
-    // // Volume Down
-    // this.phatbeat.buttonStream(37).on('pinChange', (pin, pinState) => {
-    //   if (pinState === 1) {
-    //     this.volumeDown()
-    //   }
-    // })
-
-    // // Fast foward
-    // this.phatbeat.buttonStream(29).on('pinChange', (pin, pinState) => {
-    //   if (pinState === 1) {
-    //     this.next()
-    //   }
-    // })
-
-    // // Rewind
-    // this.phatbeat.buttonStream(33).on('pinChange', (pin, pinState) => {
-    //   if (pinState === 1) {
-    //     this.prev()
-    //   }
-    // })
-
-    // // Power button
-    // this.phatbeat.buttonStream(32).on('pinChange', (pin, pinState) => {
-    //   if (pinState === 1) {
-    //   }
-    // })
   }
 
   log (...args) {
@@ -199,7 +158,7 @@ class SeaShanty {
     return this.mpvState.filename
   }
 
-  power() {
+  power () {
     this.log('POWER BUTTON')
   }
 
@@ -231,10 +190,10 @@ class SeaShanty {
   }
 
   isPlaying () {
-    if(this.mpvState.pause === null) {
+    if (this.mpvState.pause === null) {
       return false
     }
-    
+
     return this.mpvState.pause === false
   }
 
@@ -277,11 +236,10 @@ class SeaShanty {
 
     this.intervalId = setInterval(() => {
       if (startedAt) {
-        
         const diff = moment().diff(startedAt)
         const brightness = ((duration - diff) / duration * 1).toFixed(2)
 
-        if (brightness >= 0.1) {          
+        if (brightness >= 0.1) {
           setLeds(0, red, green, blue, redraw, brightness)
 
           console.error('Brightness: ', brightness)
