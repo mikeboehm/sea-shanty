@@ -79,11 +79,16 @@ describe('Timer', () => {
     })
 
     it('can can be stopped', async (done) => {
+      expect.assertions(1)
       const duration = 100
       const timer = new Timer(duration)
 
       timer.on('time-up', (data) => {
         throw new Error('This shouldnt happen')
+      })
+
+      timer.on('stopped', (data) => {
+        expect(true).toBe(true)
       })
 
       timer.on('tick', (data) => {

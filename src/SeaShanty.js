@@ -106,6 +106,10 @@ class SeaShanty {
       this.phatbeat.turnOffAllLEDs(true)
     })
 
+    this.playTimer.on('stopped', () => {
+      this.phatbeat.turnOffAllLEDs(true)
+    })
+
     this.playTimer.on('started', () => {
       let brightness = 1
       const red = 255

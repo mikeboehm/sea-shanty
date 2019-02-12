@@ -16,7 +16,7 @@ class Timer extends EventEmitter {
     let startedAt = moment()
     this.emit('started', {
       startedAt,
-      duration: this.duration,
+      duration: this.duration
     })
 
     this.timeoutId = setTimeout(() => {
@@ -40,6 +40,8 @@ class Timer extends EventEmitter {
 
     if (this.intervalId) clearInterval(this.intervalId)
     this.intervalId = null
+
+    this.emit('stopped', {})
   }
 }
 
