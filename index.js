@@ -7,6 +7,10 @@ const getLatestPodcasts = require('./src/getLatestPodcasts')
 const express = require('express')
 const app = express()
 const port = 3000
+const Timer = require('Timer')
+
+const TIMER_MINUTES = 20
+const TIMER_MS = TIMER_MINUTES * 60 * 1000
 
 const mpvPlayer = new MPV({
   'audio_only': true
@@ -19,7 +23,8 @@ let phatbeat = require('phatbeat')
 
 const boot = async () => {
   const playlist = await getLatestPodcasts(feeds)
-  const ss = new SeaShanty({ phatbeat, mpvPlayer, playlist })
+  const playTimer = new Timer(TIMER_MS)
+  const ss = new SeaShanty({ phatbeat, mpvPlayer, playlist, playTimer })
 
   app.get('/', (req, res) => res.json(ss.mpvState))
   app.post('/playpause', (req, res) => {

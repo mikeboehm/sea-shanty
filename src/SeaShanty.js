@@ -7,12 +7,13 @@ const TIMER_MS = TIMER_MINUTES * 60 * 1000
 const VOLUME_INCREMENT = 2
 
 class SeaShanty {
-  constructor ({ mpvPlayer, phatbeat, playlist }) {
+  constructor ({ mpvPlayer, phatbeat, playlist, playTimer }) {
     this.volume = 30
     this.timeoutId = undefined
     this.mpvPlayer = mpvPlayer
     this.phatbeat = phatbeat
     this.playlist = playlist
+    this.playTimer = playTimer
     this.mpvState = {
       mute: false,
       pause: null,
@@ -46,14 +47,7 @@ class SeaShanty {
   play () {
     this.log('PLAY ' + this.filename)
 
-    this._startTimer(
-      [
-        this.pause.bind(this),
-        this.phatbeat.turnOffAllLEDs.bind(this.phatbeat),
-        this.phatbeat.redraw.bind(this.phatbeat)
-      ],
-      this.phatbeat.changeSingleLED.bind(this.phatbeat)
-    )
+    this.playTimer.start()
 
     // This is supposed to load the next song if it ran out of things to play
     if (this.mpvState['playlist-pos'] === null) {
@@ -104,6 +98,22 @@ class SeaShanty {
     // Presumably this doesn't happen when
     this.mpvPlayer.on('stopped', () => {
       this.log('STOPPED')
+    })
+
+    this.playTimer.on('time-up', () => {
+      this.pause()
+      this.phatbeat.turnOffAllLEDs(true)
+    })
+
+    this.playTimer.on('started', () => {
+      let brightness = 1
+      const red = 255
+      const green = 0
+      const blue = 0
+      const redraw = true
+      const ledIndex = 0
+
+      this.phatbeat.changeSingleLED(ledIndex, red, green, blue, redraw, brightness)
     })
 
     const setup = [
@@ -207,45 +217,6 @@ class SeaShanty {
 
   getVolume () {
     return this.volume
-  }
-
-  _startTimer (timeoutCallbacks = [], setLeds) {
-    let startedAt = null
-    let brightness = 1
-    const red = 255
-    const green = 0
-    const blue = 0
-    const redraw = true
-
-    setLeds(0, red, green, blue, redraw, brightness)
-
-    // const duration = 5 * 1000
-    const duration = TIMER_MS
-
-    this.timeoutId = setTimeout(() => {
-      console.error('timeout finished')
-      startedAt = false
-      timeoutCallbacks.forEach(callback => {
-        callback()
-      })
-      this.timeoutId = false
-      this.intervalId = false
-    }, duration)
-
-    startedAt = moment()
-
-    this.intervalId = setInterval(() => {
-      if (startedAt) {
-        const diff = moment().diff(startedAt)
-        const brightness = ((duration - diff) / duration * 1).toFixed(2)
-
-        if (brightness >= 0.1) {
-          setLeds(0, red, green, blue, redraw, brightness)
-
-          console.error('Brightness: ', brightness)
-        }
-      }
-    }, duration / 200)
   }
 
   _diffObject (oldObj, newObj) {
