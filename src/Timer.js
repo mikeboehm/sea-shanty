@@ -13,12 +13,17 @@ class Timer extends EventEmitter {
   }
 
   start () {
+    let startedAt = moment()
+    this.emit('started', {
+      startedAt,
+      duration: this.duration,
+    })
+
     this.timeoutId = setTimeout(() => {
       this.emit('time-up', {})
     }, this.duration)
 
     let count = 1
-    let startedAt = moment()
     this.intervalId = setInterval(() => {
       this.emit('tick', {
         startedAt,

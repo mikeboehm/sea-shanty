@@ -37,10 +37,15 @@ describe('Timer', () => {
     })
 
     it('emits and event when the timer expires', async (done) => {
-      expect.assertions(1)
+      expect.assertions(2)
       const duration = 100
       const timer = new Timer(duration)
       const now = moment()
+
+      timer.on('started', (data) => {
+        expect(data.startedAt instanceof moment).toBe(true)
+      })
+
       timer.start()
 
       timer.on('time-up', (data) => {
