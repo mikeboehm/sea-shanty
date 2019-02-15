@@ -10,12 +10,10 @@ describe('Timer', () => {
     let timer
 
     beforeAll(() => {
-      timer = new Timer(100)
+      timer = new Timer()
     })
 
-    it('can be constructed with a duration in ms', () => {
-      const timer = new Timer(100)
-
+    it('can be constructed', () => {
       expect(timer).toBeInstanceOf(Timer)
     })
 
@@ -32,21 +30,21 @@ describe('Timer', () => {
 
   describe('emit events', () => {
     it('extends EventEmitter', () => {
-      const timer = new Timer(100)
+      const timer = new Timer()
       expect(timer).toBeInstanceOf(EventEmitter)
     })
 
     it('emits and event when the timer expires', async (done) => {
       expect.assertions(2)
       const duration = 100
-      const timer = new Timer(duration)
+      const timer = new Timer()
       const now = moment()
 
       timer.on('started', (data) => {
         expect(data.startedAt instanceof moment).toBe(true)
       })
 
-      timer.start()
+      timer.start(duration)
 
       timer.on('time-up', (data) => {
         const finished = moment()
@@ -58,9 +56,9 @@ describe('Timer', () => {
     })
 
     it('emits ticks', async (done) => {
-      // expect.assertions(10)
+      expect.assertions(2)
       const duration = 100
-      const timer = new Timer(duration)
+      const timer = new Timer()
       let ticks = 0
       let count
       timer.on('tick', (data) => {
@@ -75,13 +73,13 @@ describe('Timer', () => {
         done()
       })
 
-      timer.start()
+      timer.start(duration)
     })
 
     it('can can be stopped', async (done) => {
       expect.assertions(1)
       const duration = 100
-      const timer = new Timer(duration)
+      const timer = new Timer()
 
       timer.on('time-up', (data) => {
         throw new Error('This shouldnt happen')
@@ -95,7 +93,7 @@ describe('Timer', () => {
         throw new Error('This should not have happened')
       })
 
-      timer.start()
+      timer.start(duration)
       timer.stop()
 
       setTimeout(() => {

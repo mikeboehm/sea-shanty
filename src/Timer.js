@@ -5,33 +5,32 @@ const moment = require('moment')
 const { EventEmitter } = require('events')
 
 class Timer extends EventEmitter {
-  constructor (duration) {
+  constructor () {
     super()
-    this.duration = duration
     this.timeoutId = null
     this.intervalId = null
   }
 
-  start () {
+  start (duration) {
     let startedAt = moment()
     this.emit('started', {
       startedAt,
-      duration: this.duration
+      duration
     })
 
     this.timeoutId = setTimeout(() => {
       this.emit('time-up', {})
-    }, this.duration)
+    }, duration)
 
     let count = 1
     this.intervalId = setInterval(() => {
       this.emit('tick', {
         startedAt,
-        duration: this.duration,
+        duration: duration,
         count
       })
       count++
-    }, this.duration / 200)
+    }, duration / 200)
   }
 
   stop () {

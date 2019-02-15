@@ -47,7 +47,7 @@ class SeaShanty {
   play () {
     this.log('PLAY ' + this.filename)
 
-    this.playTimer.start()
+    this.playTimer.start(TIMER_MS)
 
     // This is supposed to load the next song if it ran out of things to play
     if (this.mpvState['playlist-pos'] === null) {
