@@ -204,6 +204,44 @@ class SeaShanty {
     this.setVolume(newVolume)
   }
 
+  ledsApi (data) {
+    const { type, values = {} }  = data
+    const { channel, led, red, green, blue, redraw, brightness } = values
+
+    switch (type) {
+      case 'changeAllLEDs': 
+        // const { red, green, blue, redraw, brightness } = data.values
+        this.phatbeat.changeAllLEDs(red, green, blue, redraw, brightness)
+        return {
+          type,
+          values: { red, green, blue, redraw, brightness }
+        }
+      case 'changeSingleLED': 
+        // const { led, red, green, blue, redraw, brightness } = data.values
+        this.phatbeat.changeSingleLED(led, red, green, blue, redraw, brightness)
+        return {
+          type,
+          values: { led, red, green, blue, redraw, brightness }
+        }
+      case 'changeAllChannelLEDs': 
+        // const { channel, red, green, blue, redraw, brightness } = data.values
+        this.phatbeat.changeAllChannelLEDs(red, green, blue, channel, redraw, brightness)
+        return {
+          type,
+          values: { channel, red, green, blue, redraw, brightness }
+        }
+      case 'turnOffAllLEDs':
+        this.phatbeat.turnOffAllLEDs(true)
+        return {
+          type
+        }
+    }
+
+    return {
+      unknownCommand: data 
+    }
+  }
+
   isPlaying () {
     if (this.mpvState.pause === null) {
       return false

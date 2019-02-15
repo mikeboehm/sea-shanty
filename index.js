@@ -1,29 +1,31 @@
 'use strict'
-const SeaShanty = require('./src/SeaShanty')
 console.log('starting js app')
-let MPV = require('node-mpv')
+const SeaShanty = require('./src/SeaShanty')
+const Timer = require('./src/Timer')
+const MPV = require('node-mpv')
 const feeds = require('./etc/feeds')
 const getLatestPodcasts = require('./src/getLatestPodcasts')
+
 const express = require('express')
+const bodyParser = require('body-parser');
+
 const app = express()
+app.use(bodyParser.json());
+
 const port = 3000
-const Timer = require('./src/Timer')
 
-const TIMER_MINUTES = 20
-const TIMER_MS = TIMER_MINUTES * 60 * 1000
-
-const mpvPlayer = new MPV({
-  'audio_only': true
-  // 'ipc_command': '--input-ipc-server',
-  // "verbose": true,
-})
-mpvPlayer.volume(30)
 
 let phatbeat = require('phatbeat')
 
 const boot = async () => {
+  const mpvPlayer = new MPV({
+    'audio_only': true
+    // 'ipc_command': '--input-ipc-server',
+    // "verbose": true,
+  })
+  mpvPlayer.volume(30)
   const playlist = await getLatestPodcasts(feeds)
-  const playTimer = new Timer(TIMER_MS)
+  const playTimer = new Timer()
   const ss = new SeaShanty({ phatbeat, mpvPlayer, playlist, playTimer })
 
   app.get('/', (req, res) => res.json(ss.mpvState))
@@ -61,6 +63,12 @@ const boot = async () => {
     console.log('API: power')
     ss.power()
     res.send(ss.mpvState)
+  })
+
+  app.post('/leds', (req, res) => {
+    console.log(req.body);
+    const response = ss.ledsApi(req.body)
+    res.send(response)
   })
 
   app.listen(port, () => console.log(`Sea Shanty app listening on port ${port}!`))
