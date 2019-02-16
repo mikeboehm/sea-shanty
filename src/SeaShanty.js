@@ -111,8 +111,8 @@ class SeaShanty {
     })
 
     this.playTimer.on('started', () => {
-      let brightness = 1
-      const red = 255
+      let brightness = 0.1
+      const red = 100
       const green = 0
       const blue = 0
       const redraw = true
