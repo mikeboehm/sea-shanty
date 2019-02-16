@@ -45,7 +45,7 @@ class SeaShanty {
   }
 
   play () {
-    this.log('PLAY ' + this.filename)
+    this.log('PLAY')
 
     this.playTimer.start(TIMER_MS)
 
@@ -74,7 +74,7 @@ class SeaShanty {
     const existingValue = this.mpvState[key]
     const paddingValue = '              '
     if (typeof existingValue !== 'undefined' && existingValue !== value) {
-      this.log(`${String(key + paddingValue).slice(0, paddingValue.length)} from: ${existingValue} to: ${value}`)
+      this.log(`MPV: ${String(key + paddingValue).slice(0, paddingValue.length)} from: ${existingValue} to: ${value}`)
     }
   }
 
@@ -243,10 +243,6 @@ class SeaShanty {
   }
 
   isPlaying () {
-    if (this.mpvState.pause === null) {
-      return false
-    }
-
     return this.mpvState.pause === false
   }
 
@@ -278,7 +274,3 @@ class SeaShanty {
 }
 
 module.exports = SeaShanty
-
-// Play/Pause
-// Volume
-// Timer
