@@ -28,6 +28,7 @@ class SeaShanty {
     }
 
     this.setVolume(this.volume)
+    this.pause()
 
     // the init_led function sets up the appropriate GPIO pins
     // optional parameter of brightness of leds, this is a decimal between 0.1 and 1.0
