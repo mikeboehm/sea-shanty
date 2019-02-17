@@ -166,7 +166,7 @@ class SeaShanty {
   }
 
   log (...args) {
-    const now = moment().format('H:M:ss')
+    const now = moment().format('HH:mm:ss')
     console.log(now, ...args)
   }
 
