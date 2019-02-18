@@ -176,6 +176,11 @@ class SeaShanty {
 
   power () {
     this.log('POWER BUTTON')
+    if(this.isPlaying) {
+      this.next()
+    } else {
+      this.play()
+    }
   }
 
   prev () {
