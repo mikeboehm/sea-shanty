@@ -2,7 +2,7 @@
 const moment = require('moment')
 
 // const TIMER_MINUTES = 0.5
-const TIMER_MINUTES = 20
+const TIMER_MINUTES = 30
 const TIMER_MS = TIMER_MINUTES * 60 * 1000
 const VOLUME_INCREMENT = 2
 
