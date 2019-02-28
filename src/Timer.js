@@ -33,14 +33,14 @@ class Timer extends EventEmitter {
     }, duration / 200)
   }
 
-  stop () {
+  cancel () {
     if (this.timeoutId) clearTimeout(this.timeoutId)
     this.timeoutId = null
 
     if (this.intervalId) clearInterval(this.intervalId)
     this.intervalId = null
 
-    this.emit('stopped', {})
+    this.emit('cancelled', {})
   }
 }
 

@@ -68,7 +68,7 @@ class SeaShanty {
     this.intervalId = false
 
     this.mpvPlayer.pause()
-    this.playTimer.stop()
+    this.playTimer.cancel()
   }
 
   _logIfDifferent (key, value) {
@@ -107,7 +107,7 @@ class SeaShanty {
       this.phatbeat.turnOffAllLEDs(true)
     })
 
-    this.playTimer.on('stopped', () => {
+    this.playTimer.on('cancelled', () => {
       this.phatbeat.turnOffAllLEDs(true)
     })
 

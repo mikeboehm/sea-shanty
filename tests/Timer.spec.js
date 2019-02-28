@@ -22,9 +22,9 @@ describe('Timer', () => {
       expect(typeof timer.start === 'function').toBe(true)
     })
 
-    it('can be stopped', () => {
-      expect(timer).toHaveProperty('stop')
-      expect(typeof timer.stop === 'function').toBe(true)
+    it('can be cancelled', () => {
+      expect(timer).toHaveProperty('cancel')
+      expect(typeof timer.cancel === 'function').toBe(true)
     })
   })
 
@@ -76,7 +76,7 @@ describe('Timer', () => {
       timer.start(duration)
     })
 
-    it('can can be stopped', async (done) => {
+    it('can can be cancelled', async (done) => {
       expect.assertions(1)
       const duration = 100
       const timer = new Timer()
@@ -85,7 +85,7 @@ describe('Timer', () => {
         throw new Error('This shouldnt happen')
       })
 
-      timer.on('stopped', (data) => {
+      timer.on('cancelled', (data) => {
         expect(true).toBe(true)
       })
 
@@ -94,7 +94,7 @@ describe('Timer', () => {
       })
 
       timer.start(duration)
-      timer.stop()
+      timer.cancel()
 
       setTimeout(() => {
         done()
