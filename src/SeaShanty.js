@@ -52,8 +52,11 @@ class SeaShanty {
 
     // This is supposed to load the next song if it ran out of things to play
     if (this.mpvState['playlist-pos'] === null) {
+      this.log('==== PLAY NEXT')
       this._playNext()
+      this.mpvPlayer.play()
     } else {
+      this.log('==== PLAY CURRENT')
       this.mpvPlayer.play()
     }
   }
