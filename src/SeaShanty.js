@@ -176,7 +176,7 @@ class SeaShanty {
 
   power () {
     this.log('POWER BUTTON')
-    if(this.isPlaying) {
+    if (this.isPlaying) {
       this.next()
     } else {
       this.play()
@@ -211,25 +211,25 @@ class SeaShanty {
   }
 
   ledsApi (data) {
-    const { type, values = {} }  = data
+    const { type, values = {} } = data
     const { channel, led, red, green, blue, redraw, brightness } = values
 
     switch (type) {
-      case 'changeAllLEDs': 
+      case 'changeAllLEDs':
         // const { red, green, blue, redraw, brightness } = data.values
         this.phatbeat.changeAllLEDs(red, green, blue, redraw, brightness)
         return {
           type,
           values: { red, green, blue, redraw, brightness }
         }
-      case 'changeSingleLED': 
+      case 'changeSingleLED':
         // const { led, red, green, blue, redraw, brightness } = data.values
         this.phatbeat.changeSingleLED(led, red, green, blue, redraw, brightness)
         return {
           type,
           values: { led, red, green, blue, redraw, brightness }
         }
-      case 'changeAllChannelLEDs': 
+      case 'changeAllChannelLEDs':
         // const { channel, red, green, blue, redraw, brightness } = data.values
         this.phatbeat.changeAllChannelLEDs(red, green, blue, channel, redraw, brightness)
         return {
@@ -244,7 +244,7 @@ class SeaShanty {
     }
 
     return {
-      unknownCommand: data 
+      unknownCommand: data
     }
   }
 

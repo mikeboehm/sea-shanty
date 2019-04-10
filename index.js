@@ -7,13 +7,12 @@ const feeds = require('./etc/feeds')
 const getLatestPodcasts = require('./src/getLatestPodcasts')
 
 const express = require('express')
-const bodyParser = require('body-parser');
+const bodyParser = require('body-parser')
 
 const app = express()
-app.use(bodyParser.json());
+app.use(bodyParser.json())
 
 const port = 3000
-
 
 let phatbeat = require('phatbeat')
 
@@ -66,7 +65,7 @@ const boot = async () => {
   })
 
   app.post('/leds', (req, res) => {
-    console.log(req.body);
+    console.log(req.body)
     const response = ss.ledsApi(req.body)
     res.send(response)
   })

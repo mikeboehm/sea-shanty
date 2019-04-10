@@ -1,5 +1,5 @@
 'use strict'
-/* global beforeAll, describe, it, expect */
+/* global describe, it, expect */
 const Alarm = require('Alarm')
 const moment = require('moment')
 
@@ -32,7 +32,7 @@ describe('Alarm clock', () => {
 
   it('can handle missing days', () => {
     const alarmTimes = {
-      2: { hour: 6, minute: 0 },
+      2: { hour: 6, minute: 0 }
     }
     const alarm = new Alarm(alarmTimes)
     const now = moment('2019-02-12T09:00:00.000Z')

@@ -9,10 +9,10 @@ class Alarm extends EventEmitter {
   }
 
   getNextAlarm (now, alarm) {
-    if(typeof alarm === 'undefined') alarm = moment(now)
+    if (typeof alarm === 'undefined') alarm = moment(now)
     const todaySetting = this.alarmTimes[alarm.day()]
-    
-    if(typeof todaySetting === 'undefined') {
+
+    if (typeof todaySetting === 'undefined') {
       return this.getNextAlarm(now, alarm.add(1, 'day'))
     }
 
@@ -23,7 +23,7 @@ class Alarm extends EventEmitter {
       .millisecond(0)
 
     // Need to increase the day number, without adding it to "now"
-    if(now >= alarm) {
+    if (now >= alarm) {
       return this.getNextAlarm(now, alarm.add(1, 'day'))
     }
 
@@ -32,7 +32,7 @@ class Alarm extends EventEmitter {
 
   ZgetNextAlarm (now, attempts = 0) {
     attempts++
-    if(attempts >= 7) {
+    if (attempts >= 7) {
       console.error('TOO MANY ATTEMPTS. BAILING')
       return false
     }
@@ -56,7 +56,7 @@ class Alarm extends EventEmitter {
       .seconds(0)
       .millisecond(0)
 
-      console.error('PROPOSED ALARM', alarm)
+    console.error('PROPOSED ALARM', alarm)
 
     // See if today's alarm has passed
     if (now >= alarm) {
