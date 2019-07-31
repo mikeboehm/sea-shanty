@@ -26,7 +26,11 @@ module.exports = [
     feed: 'https://www.npr.org/rss/podcast.php?id=510289'
   },
   {
-    name: 'TED Talks Daily',
-    feed: 'http://feeds.feedburner.com/TEDTalks_audio'
-  }
+    name: 'Do By Friday',
+    feed: 'https://rss.simplecast.com/podcasts/2389/rss'
+  },
+  {
+    name: 'The Anthropocene Reviewed',
+    feed: 'http://feeds.wnyc.org/TheAnthropoceneReviewed'
+  },
 ]
