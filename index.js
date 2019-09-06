@@ -70,6 +70,14 @@ const boot = async () => {
     res.send(response)
   })
 
+  app.get('/playlist', (req, res) => {
+    const listItems = ss.playlist
+      .map(item => `<li>${item.published.slice(0,10)} - ${item.podcastName}</li>`)
+
+    const response = `<ul>${listItems.join('')}</ul>`
+    res.send(response)
+  })
+
   app.listen(port, () => console.log(`Sea Shanty app listening on port ${port}!`))
 }
 
