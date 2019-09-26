@@ -31,4 +31,31 @@ describe('It can get latest podcasts', () => {
 
     done()
   })
+
+  it('sorts in chronological order', async () => {
+    const feeds = [{
+      name: 'Reply All',
+      feed: 'http://feeds.gimletmedia.com/hearreplyall'
+    },
+    {
+      name: 'Radiolab',
+      feed: 'http://feeds.wnyc.org/radiolab'
+    }]
+
+    const playlist = await getLatestPodcasts(feeds)
+
+    let prev
+    playlist.map(episode => episode.published).forEach((published) => {      
+      if (typeof prev === 'undefined') {
+        prev = new Date(published)
+        return
+      }
+
+      const last = new Date(prev)
+      const now = new Date(published)
+      
+      expect(last.getTime()).toBeLessThan(now.getTime())
+      prev = now
+    })
+  })
 })

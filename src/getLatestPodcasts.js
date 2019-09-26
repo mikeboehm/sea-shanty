@@ -28,12 +28,12 @@ function parseFeed (feedXml) {
     })
 }
 
-function sortByNewestFirst (a, b) {
+function sortByOldesrFirst (a, b) {
   const aTime = new Date(a.published)
   const bTime = new Date(b.published)
 
-  if (aTime < bTime) { return 1 }
-  if (aTime > bTime) { return -1 }
+  if (aTime < bTime) { return -1 }
+  if (aTime > bTime) { return 1 }
   return 0
 }
 
@@ -45,7 +45,7 @@ const getLatestPodcasts = async (feeds) => {
       return Promise.all(responses.map(feedXml => parseFeed(feedXml)))
     }).then(parsedFeeds => [].concat.apply([], parsedFeeds))
 
-  return episodes.sort(sortByNewestFirst)
+  return episodes.sort(sortByOldesrFirst)
 }
 
 module.exports = getLatestPodcasts

@@ -32,5 +32,5 @@ module.exports = [
   {
     name: 'The Anthropocene Reviewed',
     feed: 'http://feeds.wnyc.org/TheAnthropoceneReviewed'
-  },
+  }
 ]
