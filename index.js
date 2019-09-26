@@ -4,7 +4,7 @@ const SeaShanty = require('./src/SeaShanty')
 const Timer = require('./src/Timer')
 const MPV = require('node-mpv')
 const feeds = require('./etc/feeds')
-const getLatestPodcasts = require('./src/getLatestPodcasts')
+const getLatestPodcasts = require('./src/feed/getLatestPodcasts')
 
 const express = require('express')
 const bodyParser = require('body-parser')
@@ -72,7 +72,7 @@ const boot = async () => {
 
   app.get('/playlist', (req, res) => {
     const listItems = ss.playlist
-      .map(item => `<li>${item.published.slice(0,10)} - ${item.podcastName}</li>`)
+      .map(item => `<li>${item.published.slice(0, 10)} - ${item.podcastName}</li>`)
 
     const response = `<ul>${listItems.join('')}</ul>`
     res.send(response)

@@ -1,5 +1,5 @@
 /* global describe, it, expect */
-const getLatestPodcasts = require('getLatestPodcasts')
+const getLatestPodcasts = require('../../src/feed/getLatestPodcasts')
 
 describe('It can get latest podcasts', () => {
   it('can get latest podcasts', async (done) => {
@@ -57,5 +57,9 @@ describe('It can get latest podcasts', () => {
       expect(last.getTime()).toBeLessThan(now.getTime())
       prev = now
     })
+  })
+
+  it.skip('appends new episodes to the end', async() => {
+    
   })
 })
