@@ -2,6 +2,8 @@
 const podcastParser = require('node-podcast-parser')
 const rp = require('request-promise-native')
 
+const sortByOldestFirst = require('./sortByOldestFirst.js')
+
 function parseEpisode (episode, podcastName) {
   // console.error(Object.keys(episode))
   const { guid, enclosure: { url }, published, duration } = episode
@@ -28,14 +30,7 @@ function parseFeed (feedXml) {
     })
 }
 
-function sortByOldesrFirst (a, b) {
-  const aTime = new Date(a.published)
-  const bTime = new Date(b.published)
 
-  if (aTime < bTime) { return -1 }
-  if (aTime > bTime) { return 1 }
-  return 0
-}
 
 const getLatestPodcasts = async (feeds) => {
   const requests = feeds.map(feed => rp(feed.feed))
@@ -45,7 +40,7 @@ const getLatestPodcasts = async (feeds) => {
       return Promise.all(responses.map(feedXml => parseFeed(feedXml)))
     }).then(parsedFeeds => [].concat.apply([], parsedFeeds))
 
-  return episodes.sort(sortByOldesrFirst)
+  return episodes.sort(sortByOldestFirst)
 }
 
 module.exports = getLatestPodcasts

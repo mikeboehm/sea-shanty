@@ -1,6 +1,8 @@
 /* global describe, it, expect */
 const getLatestPodcasts = require('../../src/feed/getLatestPodcasts')
 
+const assertSorted = require('./helpers/assertSorted')
+
 describe('It can get latest podcasts', () => {
   it('can get latest podcasts', async (done) => {
     const feeds = [{
@@ -44,19 +46,7 @@ describe('It can get latest podcasts', () => {
 
     const playlist = await getLatestPodcasts(feeds)
 
-    let prev
-    playlist.map(episode => episode.published).forEach((published) => {      
-      if (typeof prev === 'undefined') {
-        prev = new Date(published)
-        return
-      }
-
-      const last = new Date(prev)
-      const now = new Date(published)
-      
-      expect(last.getTime()).toBeLessThan(now.getTime())
-      prev = now
-    })
+    assertSorted(playlist)
   })
 
   it.skip('appends new episodes to the end', async() => {
