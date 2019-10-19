@@ -7,6 +7,7 @@ const MPV = require('node-mpv')
 const feeds = require('./etc/feeds')
 const getLatestPodcasts = require('./src/feed/getLatestPodcasts')
 
+const moment = require('moment')
 const express = require('express')
 const bodyParser = require('body-parser')
 
@@ -24,11 +25,28 @@ const boot = async () => {
     // "verbose": true,
   })
   mpvPlayer.volume(30)
-  const newEpisodes = await getLatestPodcasts(feeds)
+  // const newEpisodes = await getLatestPodcasts(feeds)
   const playlist = new Playlist()
-  playlist.update(newEpisodes)
+  // playlist.update(newEpisodes)
   const playTimer = new Timer()
   const ss = new SeaShanty({ phatbeat, mpvPlayer, playlist, playTimer })
+
+  const UPDATE_HOUR = 18 // 18:00
+  const feedUpdateTimer = new Timer()
+
+  feedUpdateTimer.start(0)
+
+  feedUpdateTimer.on('time-up', () => {
+    console.error('UPDATING FEEDS')
+    getLatestPodcasts(feeds).then(newEpisodes => {
+      playlist.update(newEpisodes)
+      const updateAt = moment()
+        .add(14, 'days')
+        .hour(UPDATE_HOUR)        
+      
+      feedUpdateTimer.start(updateAt.diff(moment()))
+    })    
+  })
 
   app.get('/', (req, res) => res.json(ss.mpvState))
   app.post('/playpause', (req, res) => {
