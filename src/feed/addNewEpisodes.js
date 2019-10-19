@@ -10,8 +10,9 @@ const ONE_MONTH_AGO = 30 * 24 * 60 * 60 * 1000
  * it doesn't have duplicates
  * it drops older episodes
  */
-const addNewEpisodes = (playlist, newEpisodes, now = new Date()) => {
-  
+const addNewEpisodes = (playlist, newEpisodes) => {
+  const now = moment()
+
   return playlist
     .concat(newEpisodes)
     .sort(sortByOldestFirst)

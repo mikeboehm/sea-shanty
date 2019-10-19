@@ -8,8 +8,6 @@ const now = moment()
 const playlist = require('./assets/examplePlaylist.js')(now)
 const assertSorted = require('./helpers/assertSorted')
 
-
-
 describe('Add New Episodes', () => {
   
   const newEpisodes = [{ 
@@ -22,13 +20,13 @@ describe('Add New Episodes', () => {
   }]
 
   it('adds new episodes', () => {
-    const newPlayList = addNewEpisodes( playlist, newEpisodes, now )
+    const newPlayList = addNewEpisodes( playlist, newEpisodes)
 
     expect(newPlayList.length).toBeGreaterThan(playlist.length)
   })
 
   it('keeps it chronological', () => {    
-    const newPlayList = addNewEpisodes( playlist, newEpisodes, now )
+    const newPlayList = addNewEpisodes( playlist, newEpisodes)
 
     assertSorted(newPlayList)
   })
@@ -45,7 +43,7 @@ describe('Add New Episodes', () => {
       podcastName: 'New' 
     }]
 
-    const newPlayList = addNewEpisodes( playlist, newEpisodes, now )
+    const newPlayList = addNewEpisodes( playlist, newEpisodes)
 
     expect(newPlayList.length).toBe(playlist.length + 1)
   })
@@ -56,7 +54,7 @@ describe('Add New Episodes', () => {
 
     
 
-    const newPlayList = addNewEpisodes( [oldest, ...others], newEpisodes, now)
+    const newPlayList = addNewEpisodes( [oldest, ...others], newEpisodes)
 
     expect(newPlayList.length).toBe(playlist.length)
   })
