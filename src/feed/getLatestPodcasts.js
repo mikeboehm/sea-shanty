@@ -7,7 +7,7 @@ const sortByOldestFirst = require('./sortByOldestFirst.js')
 
 function parseEpisode (episode, podcastName) {  
   try {
-    const { guid, enclosure: { url }, published, duration } = episode
+    const { guid, enclosure: { url }, published, duration, title } = episode
     
     // Valid important fields are set
     // For some reason, it didn't work when I was trying to declare the array as a literal eg: [url, published]      
@@ -19,7 +19,7 @@ function parseEpisode (episode, podcastName) {
       })
 
     return {
-      guid, url, published: published.toISOString(), duration, podcastName
+      guid, url, published: published.toISOString(), duration, podcastName, title
     }
   } catch (error) {
     console.log('Episode missing a necessary field: '.toUpperCase(), error.message)    

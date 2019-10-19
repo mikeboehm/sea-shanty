@@ -190,9 +190,12 @@ class SeaShanty {
     this.log('PREV')
     this.mpvPlayer.prev()
   }
-
+  
   _playNext () {
-    const url = this.playlist.shift().url
+    console.error('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+    console.error(this.playlist)
+    console.error('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+    const { url } = this.playlist.next()
     this.mpvPlayer.load(url)
   }
 

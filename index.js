@@ -1,5 +1,6 @@
 'use strict'
 console.log('starting js app')
+const Playlist = require('./src/Playlist')
 const SeaShanty = require('./src/SeaShanty')
 const Timer = require('./src/Timer')
 const MPV = require('node-mpv')
@@ -23,7 +24,9 @@ const boot = async () => {
     // "verbose": true,
   })
   mpvPlayer.volume(30)
-  const playlist = await getLatestPodcasts(feeds)
+  const newEpisodes = await getLatestPodcasts(feeds)
+  const playlist = new Playlist()
+  playlist.update(newEpisodes)
   const playTimer = new Timer()
   const ss = new SeaShanty({ phatbeat, mpvPlayer, playlist, playTimer })
 
@@ -71,10 +74,13 @@ const boot = async () => {
   })
 
   app.get('/playlist', (req, res) => {
-    const listItems = ss.playlist
-      .map(item => `<li>${item.published.slice(0, 10)} - ${item.podcastName}</li>`)
+    const {podcastName, title} = ss.playlist.currentEpisode
 
-    const response = `<ul>${listItems.join('')}</ul>`
+    const listItems = ss.playlist.episodes
+      .map(item => `<li>${item.published.slice(0, 10)} - ${item.podcastName} - ${item.title}</li>`)
+      .join('')
+
+    const response = `<h1>Currently: ${podcastName} - ${title}</h1><ul>${listItems}</ul>`
     res.send(response)
   })
 
