@@ -12,24 +12,7 @@ describe('It can get latest podcasts', () => {
 
     const response = await getLatestPodcasts(feeds)
 
-    expect(response.length).toBe(5)
-
-    done()
-  })
-
-  it('can gets the latest 5 episodes for each podcasts', async (done) => {
-    const feeds = [{
-      name: 'Reply All',
-      feed: 'http://feeds.gimletmedia.com/hearreplyall'
-    },
-    {
-      name: 'Radiolab',
-      feed: 'http://feeds.wnyc.org/radiolab'
-    }]
-
-    const response = await getLatestPodcasts(feeds)
-
-    expect(response.length).toBe(10)
+    expect(response.length).toBeGreaterThan(0)
 
     done()
   })

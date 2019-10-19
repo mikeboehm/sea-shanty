@@ -2,15 +2,30 @@
 const podcastParser = require('node-podcast-parser')
 const rp = require('request-promise-native')
 
+const addNewEpisodes = require('./addNewEpisodes')
 const sortByOldestFirst = require('./sortByOldestFirst.js')
 
-function parseEpisode (episode, podcastName) {
-  // console.error(Object.keys(episode))
-  const { guid, enclosure: { url }, published, duration } = episode
+function parseEpisode (episode, podcastName) {  
+  try {
+    const { guid, enclosure: { url }, published, duration } = episode
+    
+    // Valid important fields are set
+    // For some reason, it didn't work when I was trying to declare the array as a literal eg: [url, published]      
+      const valuesToCheck = [url, published]
+      valuesToCheck.forEach(field => {        
+        if(typeof field == 'undefined') {
+          throw new Error('Field exists but value is undefined')
+        }
+      })
 
-  return {
-    guid, url, published: published.toISOString(), duration, podcastName
-  }
+    return {
+      guid, url, published: published.toISOString(), duration, podcastName
+    }
+  } catch (error) {
+    console.log('Episode missing a necessary field: '.toUpperCase(), error.message)    
+    console.log(episode)
+    return false
+  }  
 }
 
 function podcastParserAsync (feedXml) {
@@ -24,23 +39,18 @@ function podcastParserAsync (feedXml) {
 
 function parseFeed (feedXml) {
   return podcastParserAsync(feedXml)
-    .then(data => {
-      const podcastEpisodes = data.episodes.slice(0, 5)
-      return podcastEpisodes.map(episode => parseEpisode(episode, data.title))
-    })
+    .then(data => data.episodes.map(episode => parseEpisode(episode, data.title))) 
 }
 
+const getLatestPodcasts = async (feeds, playlist = []) => {
+  const requests = feeds.map(feed => rp(feed.feed)
+    .then(parseFeed)
+    .then(episodes => episodes.filter(Boolean)))
 
+  const episodes = await Promise.all(requests)    
+    .then(parsedFeeds => [].concat.apply([], parsedFeeds))    
 
-const getLatestPodcasts = async (feeds) => {
-  const requests = feeds.map(feed => rp(feed.feed))
-
-  const episodes = await Promise.all(requests)
-    .then(responses => {
-      return Promise.all(responses.map(feedXml => parseFeed(feedXml)))
-    }).then(parsedFeeds => [].concat.apply([], parsedFeeds))
-
-  return episodes.sort(sortByOldestFirst)
+  return addNewEpisodes(playlist, episodes.sort(sortByOldestFirst))
 }
 
 module.exports = getLatestPodcasts
