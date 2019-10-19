@@ -1,5 +1,5 @@
 'use strict'
-
+const moment = require('moment')
 const sortByOldestFirst = require('./sortByOldestFirst.js')
 
 const ONE_MONTH_AGO = 30 * 24 * 60 * 60 * 1000
@@ -25,9 +25,8 @@ const addNewEpisodes = (playlist, newEpisodes, now = new Date()) => {
       return episodes
     }, [])
     .reduce((playlist, episode) => {
-      const published = new Date(episode.published)
-
-      if(now - published <= ONE_MONTH_AGO) playlist.push(episode)
+      const published = moment.utc(episode.published)      
+      if(now.diff(published) <= ONE_MONTH_AGO) playlist.push(episode)
       
       return playlist
     }, [])
