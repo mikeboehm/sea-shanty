@@ -39,6 +39,7 @@ const boot = async () => {
   feedUpdateTimer.on('time-up', () => {
     console.error('UPDATING FEEDS')
     getLatestPodcasts(feeds).then(newEpisodes => {
+      console.error('PALYLIST LENGTH: ', newEpisodes.length)
       playlist.update(newEpisodes)
       const updateAt = moment()
         .add(14, 'days')

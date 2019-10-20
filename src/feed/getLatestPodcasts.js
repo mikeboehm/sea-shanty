@@ -43,14 +43,30 @@ function parseFeed (feedXml) {
 }
 
 const getLatestPodcasts = async (feeds, playlist = []) => {
-  const requests = feeds.map(feed => rp(feed.feed)
-    .then(parseFeed)
-    .then(episodes => episodes.filter(Boolean)))
-
+  const requests = feeds.map(
+    feed => 
+      rp(feed.feed)
+        .then(parseFeed)
+        .then(episodes => episodes.filter(Boolean))
+        .catch(e => {
+          console.error('VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV')
+          console.error('FAILED FETCHING A FEED FFS')
+          console.error('ERROR', e.message)
+          console.error('ΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛ')
+          return false
+        })
+  )
+   
   const episodes = await Promise.all(requests)    
-    .then(parsedFeeds => [].concat.apply([], parsedFeeds))    
-
-  return addNewEpisodes(playlist, episodes.sort(sortByOldestFirst))
+    .then(feedResponses => feedResponses.filter(Boolean))      
+    .then(parsedFeeds => [].concat.apply([], parsedFeeds))
+          
+    console.error('PODCAST NAMES', episodes.map(episode => episode.podcastName).reduce((names, name) => {
+      if(!names.includes(name)) names.push(name)      
+      return names
+    }, []))
+    
+    return addNewEpisodes(playlist, episodes.sort(sortByOldestFirst))
 }
 
 module.exports = getLatestPodcasts
