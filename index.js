@@ -37,6 +37,20 @@ const boot = async () => {
 
   feedUpdateTimer.start(0)
 
+  
+  process.on('SIGINT', (value) => {
+    console.error('SIGINT DETECTED')
+    ss.quit()
+    process.exit()
+    if (sigintCount > 2) {
+      console.error('sigintCount')
+      // process.exit()
+    } else {
+      // config.stopProcessing = true
+      // globalEvents.emit('process.stopProcessing')
+    }
+  })
+
   feedUpdateTimer.on('time-up', () => {
     console.error('UPDATING FEEDS')
     getLatestPodcasts(feeds).then(newEpisodes => {
@@ -50,7 +64,7 @@ const boot = async () => {
     })    
   })
 
-  app.get('/', (req, res) => res.json(ss.mpvState))
+  app.get('/', (req, res) => res.json(ss.currentEpisode))
   app.post('/playpause', (req, res) => {
     console.log('API: play/pause')
     ss.togglePause()

@@ -14,6 +14,11 @@ class SeaShanty {
     this.phatbeat = phatbeat
     this.playlist = playlist
     this.playTimer = playTimer
+    this.currentEpisode = {
+      podcastName: '',
+      title: '',
+      timeposition: 0
+    }
     this.mpvState = {
       mute: false,
       pause: null,
@@ -88,6 +93,11 @@ class SeaShanty {
     })
   }
 
+  quit() {    
+    console.error('QUITTING')
+    this.mpvPlayer.quit()
+  }
+
   loadHandlers () {
     this.mpvPlayer.on('statuschange', status => {
       status = { ...status }
@@ -97,6 +107,10 @@ class SeaShanty {
         .forEach((key) => this._logIfDifferent(key, status[key]))
 
       this.mpvState = status
+    })
+
+    this.mpvPlayer.on('timeposition', value => {
+      this.currentEpisode.timeposition = value
     })
 
     // This occurs when it runs out of music
@@ -192,8 +206,12 @@ class SeaShanty {
   }
   
   _playNext () {
-    const { url } = this.playlist.next()
-    this.mpvPlayer.load(url)
+    const nextEpisode = this.playlist.next()
+    
+    this.currentEpisode = nextEpisode
+    this.currentEpisode.timeposition = 0
+    
+    this.mpvPlayer.load(nextEpisode.url)
   }
 
   next () {
