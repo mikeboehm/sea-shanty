@@ -20,7 +20,8 @@ let phatbeat = require('phatbeat')
 
 const boot = async () => {
   const mpvPlayer = new MPV({
-    'audio_only': true
+    'audio_only': true,
+    'debug': true
     // 'ipc_command': '--input-ipc-server',
     // "verbose": true,
   })

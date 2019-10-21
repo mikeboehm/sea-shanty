@@ -50,7 +50,7 @@ const getLatestPodcasts = async (feeds, playlist = []) => {
         .then(episodes => episodes.filter(Boolean))
         .catch(e => {
           console.error('VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV')
-          console.error('FAILED FETCHING A FEED FFS')
+          console.error('FAILED FETCHING A FEED FFS', feed.name)
           console.error('ERROR', e.message)
           console.error('ΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛ')
           return false
