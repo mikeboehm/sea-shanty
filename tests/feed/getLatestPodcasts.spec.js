@@ -32,7 +32,7 @@ describe('It can get latest podcasts', () => {
     assertSorted(playlist)
   })
 
-  it.skip('appends new episodes to the end', async() => {
-    
+  it.skip('appends new episodes to the end', async () => {
+
   })
 })

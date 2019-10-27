@@ -93,7 +93,7 @@ class SeaShanty {
     })
   }
 
-  quit() {    
+  quit () {
     console.error('QUITTING')
     this.mpvPlayer.quit()
   }
@@ -204,13 +204,13 @@ class SeaShanty {
     this.log('PREV')
     this.mpvPlayer.prev()
   }
-  
+
   _playNext () {
     const nextEpisode = this.playlist.next()
-    
+
     this.currentEpisode = nextEpisode
     this.currentEpisode.timeposition = 0
-    
+
     this.mpvPlayer.load(nextEpisode.url)
   }
 

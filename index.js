@@ -37,7 +37,6 @@ const boot = async () => {
 
   feedUpdateTimer.start(0)
 
-  
   process.on('SIGINT', (value) => {
     console.error('SIGINT DETECTED')
     ss.quit()
@@ -58,10 +57,10 @@ const boot = async () => {
       playlist.update(newEpisodes)
       const updateAt = moment()
         .add(14, 'days')
-        .hour(UPDATE_HOUR)        
-      
+        .hour(UPDATE_HOUR)
+
       feedUpdateTimer.start(updateAt.diff(moment()))
-    })    
+    })
   })
 
   app.get('/', (req, res) => res.json(ss.currentEpisode))
@@ -108,7 +107,7 @@ const boot = async () => {
   })
 
   app.get('/playlist', (req, res) => {
-    const {podcastName, title} = ss.playlist.currentEpisode
+    const { podcastName, title } = ss.playlist.currentEpisode
 
     const listItems = ss.playlist.episodes
       .map(item => `<li>${item.published.slice(0, 10)} - ${item.podcastName} - ${item.title}</li>`)

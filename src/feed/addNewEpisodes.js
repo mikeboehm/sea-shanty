@@ -17,18 +17,18 @@ const addNewEpisodes = (playlist, newEpisodes) => {
     .concat(newEpisodes)
     .sort(sortByOldestFirst)
     .reduce((episodes, current) => {
-      if(!episodes.length) return [current]
-      
+      if (!episodes.length) return [current]
+
       const prev = episodes.slice(-1).pop()
-      
-      if(prev.guid != current.guid) episodes.push(current)
-      
+
+      if (prev.guid != current.guid) episodes.push(current)
+
       return episodes
     }, [])
     .reduce((playlist, episode) => {
-      const published = moment.utc(episode.published)      
-      if(now.diff(published) <= ONE_MONTH_AGO) playlist.push(episode)
-      
+      const published = moment.utc(episode.published)
+      if (now.diff(published) <= ONE_MONTH_AGO) playlist.push(episode)
+
       return playlist
     }, [])
 }

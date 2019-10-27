@@ -1,6 +1,6 @@
 'use strict'
 
-const sortByOldestFirst =  (a, b) => {
+const sortByOldestFirst = (a, b) => {
   const aTime = new Date(a.published)
   const bTime = new Date(b.published)
 
