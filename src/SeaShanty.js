@@ -99,15 +99,14 @@ class SeaShanty {
   }
 
   loadHandlers () {
-    this.mpvPlayer.on('statuschange', status => {
-      status = { ...status }
-      // this.log('MPV STATUSCHANGE', new Date(), status);
+    // this.mpvPlayer.on('statuschange', status => {
+    //   status = { ...status }
+      
+    //   this._filterEvents(status, ['duration'])
+    //     .forEach((key) => this._logIfDifferent(key, status[key]))
 
-      this._filterEvents(status, ['duration'])
-        .forEach((key) => this._logIfDifferent(key, status[key]))
-
-      this.mpvState = status
-    })
+    //   this.mpvState = status
+    // })
 
     this.mpvPlayer.on('timeposition', value => {
       this.currentEpisode.timeposition = value
@@ -116,8 +115,13 @@ class SeaShanty {
     // This occurs when it runs out of music
     // Presumably this doesn't happen when
     this.mpvPlayer.on('stopped', () => {
-      this.log('STOPPED')
+      this.log('MPV PLAYER STOPPED')
     })
+
+    this.mpvPlayer.on('paused', () => {
+      this.log('MPV PLAYER PAUSED')
+    })
+
 
     this.playTimer.on('time-up', () => {
       this.pause()
