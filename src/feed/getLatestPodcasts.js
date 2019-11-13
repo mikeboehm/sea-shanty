@@ -22,8 +22,8 @@ function parseEpisode (episode, podcastName) {
       guid, url, published: published.toISOString(), duration, podcastName, title
     }
   } catch (error) {
-    console.log('Episode missing a necessary field: '.toUpperCase(), error.message)
-    console.log(episode)
+    // console.log('Episode missing a necessary field: '.toUpperCase(), error.message)
+    // console.log(episode)
     return false
   }
 }
@@ -42,19 +42,26 @@ function parseFeed (feedXml) {
     .then(data => data.episodes.map(episode => parseEpisode(episode, data.title)))
 }
 
+const processFetchResults = (xmlResponse) => {
+  return parseFeed(xmlResponse)
+    .then(episodes => episodes.filter(Boolean))
+}
+
+const fetchFeed = (feed) => {
+  return rp(feed.feed)
+    .then(processFetchResults)
+    .catch(e => {
+      // console.error('VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV')
+      console.error('FAILED FETCHING A FEED FFS', feed.name, e.message)
+      // console.error('ERROR', e.message)
+      // console.error('ΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛ')
+      return false
+    })
+}
+
 const getLatestPodcasts = async (feeds, playlist = []) => {
   const requests = feeds.map(
-    feed =>
-      rp(feed.feed)
-        .then(parseFeed)
-        .then(episodes => episodes.filter(Boolean))
-        .catch(e => {
-          console.error('VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV')
-          console.error('FAILED FETCHING A FEED FFS', feed.name)
-          console.error('ERROR', e.message)
-          console.error('ΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛ')
-          return false
-        })
+    feed => fetchFeed(feed)
   )
 
   const episodes = await Promise.all(requests)
@@ -64,9 +71,12 @@ const getLatestPodcasts = async (feeds, playlist = []) => {
   console.error('PODCAST NAMES', episodes.map(episode => episode.podcastName).reduce((names, name) => {
     if (!names.includes(name)) names.push(name)
     return names
-  }, []))
+  }, [])).join(', ')
 
   return addNewEpisodes(playlist, episodes.sort(sortByOldestFirst))
 }
 
-module.exports = getLatestPodcasts
+module.exports = {
+  getLatestPodcasts,
+  fetchFeed
+}

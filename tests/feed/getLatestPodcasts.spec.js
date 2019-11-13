@@ -1,5 +1,5 @@
 /* global describe, it, expect */
-const getLatestPodcasts = require('../../src/feed/getLatestPodcasts')
+const { getLatestPodcasts } = require('../../src/feed/getLatestPodcasts')
 
 const assertSorted = require('./helpers/assertSorted')
 

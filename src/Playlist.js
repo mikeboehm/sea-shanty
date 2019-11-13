@@ -1,6 +1,14 @@
 const addNewEpisodes = require('./feed/addNewEpisodes')
+const Feed = require('./Feed')
+const logger = require('./Logger')
 class Playlist {
-  constructor () {
+  constructor (feeds) {
+    feeds.map(feed => new Feed(feed))
+      .map(feed => feed.on('updated', episodes => {        
+        logger.info(`Updated: ${feed.name}. Fetched ${episodes.length} episodes`)
+        this.update(episodes)
+      }))
+
     this.episodes = []
     this.currentGuid = undefined
     this.currentEpisode = {

@@ -1,6 +1,8 @@
 'use strict'
 const moment = require('moment')
 
+const logger = require('./Logger')
+
 // const TIMER_MINUTES = 0.5
 const TIMER_MINUTES = 30
 const TIMER_MS = TIMER_MINUTES * 60 * 1000
@@ -94,19 +96,19 @@ class SeaShanty {
   }
 
   quit () {
-    console.error('QUITTING')
+    logger.info('QUITTING')
     this.mpvPlayer.quit()
   }
 
   loadHandlers () {
-    // this.mpvPlayer.on('statuschange', status => {
-    //   status = { ...status }
-      
-    //   this._filterEvents(status, ['duration'])
-    //     .forEach((key) => this._logIfDifferent(key, status[key]))
+    this.mpvPlayer.on('statuschange', status => {
+      status = { ...status }
 
-    //   this.mpvState = status
-    // })
+      // this._filterEvents(status, ['duration'])
+      //   .forEach((key) => this._logIfDifferent(key, status[key]))
+
+      this.mpvState = status
+    })
 
     this.mpvPlayer.on('timeposition', value => {
       this.currentEpisode.timeposition = value
@@ -121,7 +123,6 @@ class SeaShanty {
     this.mpvPlayer.on('paused', () => {
       this.log('MPV PLAYER PAUSED')
     })
-
 
     this.playTimer.on('time-up', () => {
       this.pause()
@@ -186,9 +187,8 @@ class SeaShanty {
     })
   }
 
-  log (...args) {
-    const now = moment().format('HH:mm:ss')
-    console.log(now, ...args)
+  log (...args) {    
+    logger.info( ...args)
   }
 
   get filename () {
@@ -196,7 +196,7 @@ class SeaShanty {
   }
 
   power () {
-    this.log('POWER BUTTON')
+    this.log('Button: POWER')
     if (this.isPlaying) {
       this.next()
     } else {
@@ -205,7 +205,7 @@ class SeaShanty {
   }
 
   prev () {
-    this.log('PREV')
+    this.log('Button: PREV')
     this.mpvPlayer.prev()
   }
 
@@ -219,19 +219,19 @@ class SeaShanty {
   }
 
   next () {
-    this.log('NEXT')
+    this.log('Button: NEXT')
     this._playNext()
   }
 
   volumeUp () {
     const newVolume = this.getVolume() + VOLUME_INCREMENT
-    this.log(`VOLUME UP  : ${newVolume}`)
+    this.log(`Button: VOLUME UP  : ${newVolume}`)
     this.setVolume(newVolume)
   }
 
   volumeDown () {
     const newVolume = this.getVolume() - VOLUME_INCREMENT
-    this.log(`VOLUME DOWN: ${newVolume}`)
+    this.log(`Button: VOLUME DOWN: ${newVolume}`)
     this.setVolume(newVolume)
   }
 

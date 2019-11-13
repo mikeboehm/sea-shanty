@@ -1,11 +1,13 @@
 'use strict'
-console.log('starting js app')
+
 const Playlist = require('./src/Playlist')
 const SeaShanty = require('./src/SeaShanty')
 const Timer = require('./src/Timer')
 const MPV = require('node-mpv')
 const feeds = require('./etc/feeds')
-const getLatestPodcasts = require('./src/feed/getLatestPodcasts')
+const logger = require('./src/Logger')  
+
+logger.info('starting js app')
 
 const moment = require('moment')
 const express = require('express')
@@ -14,35 +16,29 @@ const bodyParser = require('body-parser')
 const app = express()
 app.use(bodyParser.json())
 
-const port = 3000
+const {express: {port}} = require('config')
 
 let phatbeat = require('phatbeat')
 
 const boot = async () => {
   const mpvPlayer = new MPV({
     'audio_only': true,
-    'debug': true
+    'debug': false
     // 'ipc_command': '--input-ipc-server',
     // "verbose": true,
   })
   mpvPlayer.volume(30)
-  // const newEpisodes = await getLatestPodcasts(feeds)
-  const playlist = new Playlist()
-  // playlist.update(newEpisodes)
+
+  const playlist = new Playlist(feeds)
   const playTimer = new Timer()
   const ss = new SeaShanty({ phatbeat, mpvPlayer, playlist, playTimer })
 
-  const UPDATE_HOUR = 18 // 18:00
-  const feedUpdateTimer = new Timer()
-
-  feedUpdateTimer.start(0)
-
   process.on('SIGINT', (value) => {
-    console.error('SIGINT DETECTED')
+    logger.error('SIGINT DETECTED')
     ss.quit()
     process.exit()
     if (sigintCount > 2) {
-      console.error('sigintCount')
+      logger.error('sigintCount')
       // process.exit()
     } else {
       // config.stopProcessing = true
@@ -50,58 +46,45 @@ const boot = async () => {
     }
   })
 
-  feedUpdateTimer.on('time-up', () => {
-    console.error('UPDATING FEEDS')
-    getLatestPodcasts(feeds).then(newEpisodes => {
-      console.error('PALYLIST LENGTH: ', newEpisodes.length)
-      playlist.update(newEpisodes)
-      const updateAt = moment()
-        .add(14, 'days')
-        .hour(UPDATE_HOUR)
-
-      feedUpdateTimer.start(updateAt.diff(moment()))
-    })
-  })
-
   app.get('/', (req, res) => res.json(ss.currentEpisode))
   app.post('/playpause', (req, res) => {
-    console.log('API: play/pause')
+    logger.info('API: play/pause')
     ss.togglePause()
     res.send(ss.mpvState)
   })
 
   app.post('/volup', (req, res) => {
-    console.log('API: volume up')
+    logger.info('API: volume up')
     ss.volumeUp()
     res.send(ss.mpvState)
   })
 
   app.post('/voldown', (req, res) => {
-    console.log('API: volume down')
+    logger.info('API: volume down')
     ss.volumeDown()
     res.send(ss.mpvState)
   })
 
   app.post('/next', (req, res) => {
-    console.log('API: next')
+    logger.info('API: next')
     ss.next()
     res.send(ss.mpvState)
   })
 
   app.post('/prev', (req, res) => {
-    console.log('API: prev')
+    logger.info('API: prev')
     ss.prev()
     res.send(ss.mpvState)
   })
 
   app.post('/power', (req, res) => {
-    console.log('API: power')
+    logger.info('API: power')
     ss.power()
     res.send(ss.mpvState)
   })
 
   app.post('/leds', (req, res) => {
-    console.log(req.body)
+    logger.info(req.body)
     const response = ss.ledsApi(req.body)
     res.send(response)
   })
@@ -117,7 +100,7 @@ const boot = async () => {
     res.send(response)
   })
 
-  app.listen(port, () => console.log(`Sea Shanty app listening on port ${port}!`))
+  app.listen(port, () => logger.info(`Sea Shanty app listening on port ${port}!`))
 }
 
 boot()

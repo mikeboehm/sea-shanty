@@ -25,10 +25,10 @@ module.exports = [
     name: 'Planet Money',
     feed: 'https://www.npr.org/rss/podcast.php?id=510289'
   },
-  {
-    name: 'Do By Friday',
-    feed: 'https://rss.simplecast.com/podcasts/2389/rss'
-  },
+  // {
+  //   name: 'Do By Friday',
+  //   feed: 'https://rss.simplecast.com/podcasts/2389/rss'
+  // },
   {
     name: 'The Anthropocene Reviewed',
     feed: 'http://feeds.wnyc.org/TheAnthropoceneReviewed'

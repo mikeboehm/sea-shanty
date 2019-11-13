@@ -19,13 +19,16 @@
   },
   "homepage": "https://github.com/mikeboehm/sea-shanty#readme",
   "dependencies": {
+    "callsite": "^1.0.0",
+    "config": "^3.2.4",
     "express": "^4.16.4",
     "jest": "^24.0.0",
     "moment": "^2.24.0",
     "node-mpv": "^1.4.3",
     "node-podcast-parser": "^2.3.0",
     "phatbeat": "^1.0.0",
-    "request-promise-native": "^1.0.5"
+    "request-promise-native": "^1.0.5",
+    "winston-loggly-bulk": "^3.0.1"
   },
   "engines": {
     "node": "10.15.0"
