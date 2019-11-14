@@ -27,7 +27,7 @@ const boot = async () => {
     // 'ipc_command': '--input-ipc-server',
     // "verbose": true,
   })
-  mpvPlayer.volume(30)
+  mpvPlayer.volume(25)
 
   const playlist = new Playlist(feeds)
   const playTimer = new Timer()
