@@ -6,7 +6,7 @@ const logger = require('./Logger')
 // const TIMER_MINUTES = 0.5
 const TIMER_MINUTES = 30
 const TIMER_MS = TIMER_MINUTES * 60 * 1000
-const VOLUME_INCREMENT = 2
+const VOLUME_INCREMENT = 1
 
 class SeaShanty {
   constructor ({ mpvPlayer, phatbeat, playlist, playTimer }) {
