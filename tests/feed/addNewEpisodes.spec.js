@@ -48,7 +48,7 @@ describe('Add New Episodes', () => {
   })
 
   it('discards old episodes', () => {
-    const [ oldest, ...others] = playlist
+    const [oldest, ...others] = playlist
     oldest.published = '2001-01-02T00:00:00.000Z'
 
     const newPlayList = addNewEpisodes([oldest, ...others], newEpisodes)

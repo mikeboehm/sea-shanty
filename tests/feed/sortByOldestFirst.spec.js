@@ -1,3 +1,5 @@
+/* global describe, it */
+
 const moment = require('moment')
 
 const sortByOldestFirst = require('../../src/feed/sortByOldestFirst')

@@ -1,3 +1,5 @@
+/* global describe, it, expect */
+
 const Feed = require('../src/Feed')
 
 describe('It can get new episodes', () => {

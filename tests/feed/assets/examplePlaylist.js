@@ -1,6 +1,4 @@
-const moment = require('moment')
-
-const now = moment()
+// const moment = require('moment')
 
 module.exports = (now) => {
   return [
