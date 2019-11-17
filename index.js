@@ -38,7 +38,11 @@ const boot = async () => {
     process.exit()
   })
 
-  app.get('/', (req, res) => res.json(ss.currentEpisode))
+  app.get('/', (req, res) => {
+    logger.info('/ (root)')
+    res.json(ss.currentEpisode)
+  })
+  
   app.post('/playpause', (req, res) => {
     logger.info('API: play/pause')
     ss.togglePause()
@@ -82,6 +86,7 @@ const boot = async () => {
   })
 
   app.get('/playlist', (req, res) => {
+    logger.info('/playlist')
     const { podcastName, title } = ss.playlist.currentEpisode
 
     const index = ss.playlist.currentPosition
