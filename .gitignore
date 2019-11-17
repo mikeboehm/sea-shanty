@@ -1,3 +1,4 @@
 node_modules/
 /.balena-sync.yml
 .DS_Store
+/tests/assets/writeableFile.json
