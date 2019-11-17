@@ -4,14 +4,17 @@ const createDataRecorder = require('../src/dataRecorder')
 const path = require('path')
 
 describe('Reading', () => {
-  it('returns false if the file does not exit', async () => {
+  it('throws an Error if the file does not exist', async () => {
+    expect.assertions(1)
     const nonExistantFile = path.join(__dirname, '/assets/nonExistantFile.json')
 
     const { read } = createDataRecorder(nonExistantFile)
 
-    const initialState = await read()
-
-    expect(initialState).toBe(false)
+    try {
+      await read()
+    } catch (error) {
+      expect(error).toBeInstanceOf(Error)
+    }
   })
 
   it('returns the contents of the file', async () => {

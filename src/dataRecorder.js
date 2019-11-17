@@ -1,41 +1,19 @@
 'use strict'
 
-// const path = require('path');
 const fs = require('fs')
+const readFile = require('util').promisify(fs.readFile)
+const writeFile = require('util').promisify(fs.writeFile)
 
 const createDataRecorder = (path) => {
-  const reader = () => {
-    return new Promise(function (resolve, reject) {
-      fs.readFile(path, function (err, data) {
-        if (err) {
-          resolve(false)
-        } else {
-          try {
-            resolve(JSON.parse(data.toString()))
-          } catch (error) {
-            resolve(false)
-          }
-        }
-      })
-    })
-  }
+  const read = () => readFile(path)
+    .then(data => JSON.parse(data.toString()))
+    .catch(error => { throw new Error(error.message) })
 
-  const writeFilePromise = (data) => {
-    data = JSON.stringify(data)
-    return new Promise(function (resolve, reject) {
-      fs.writeFile(path, data, function (err, data) {
-        if (err) {
-          reject(err)
-        } else {
-          resolve(data)
-        }
-      })
-    })
-  }
+  const update = (data) => writeFile(path, JSON.stringify(data))
 
   return {
-    read: reader,
-    update: writeFilePromise
+    read,
+    update
   }
 }
 
