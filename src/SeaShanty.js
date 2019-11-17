@@ -1,6 +1,4 @@
 'use strict'
-const moment = require('moment')
-
 const logger = require('./Logger')
 
 // const TIMER_MINUTES = 0.5
@@ -125,6 +123,7 @@ class SeaShanty {
     })
 
     this.playTimer.on('time-up', () => {
+      logger.info('Play timer finished')
       this.pause()
       this.phatbeat.turnOffAllLEDs(true)
     })
@@ -187,8 +186,8 @@ class SeaShanty {
     })
   }
 
-  log (...args) {    
-    logger.info( ...args)
+  log (...args) {
+    logger.info(...args)
   }
 
   get filename () {

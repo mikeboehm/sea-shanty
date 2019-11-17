@@ -9,7 +9,7 @@ const createDataRecorder = (path) => {
     .then(data => JSON.parse(data.toString()))
     .catch(error => { throw new Error(error.message) })
 
-  const update = (data) => writeFile(path, JSON.stringify(data))
+  const update = (data) => writeFile(path, JSON.stringify(data, null, 2))
 
   return {
     read,

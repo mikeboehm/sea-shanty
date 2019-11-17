@@ -1,4 +1,4 @@
-const assert = require('assert')
+/* global expect */
 module.exports = (playlist) => {
   let prev
   playlist.map(episode => episode.published).forEach((published) => {
@@ -10,7 +10,7 @@ module.exports = (playlist) => {
     const last = new Date(prev)
     const now = new Date(published)
 
-    assert(last.getTime()).toBeLessThan(now.getTime())
+    expect(last.getTime()).toBeLessThan(now.getTime())
     prev = now
   })
 }

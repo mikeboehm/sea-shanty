@@ -21,7 +21,7 @@ const addNewEpisodes = (playlist, newEpisodes) => {
 
       const prev = episodes.slice(-1).pop()
 
-      if (prev.guid != current.guid) episodes.push(current)
+      if (prev.guid !== current.guid) episodes.push(current)
 
       return episodes
     }, [])

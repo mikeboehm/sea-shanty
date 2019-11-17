@@ -1,6 +1,7 @@
 'use strict'
 const podcastParser = require('node-podcast-parser')
 const rp = require('request-promise-native')
+const logger = require('../Logger')
 
 const addNewEpisodes = require('./addNewEpisodes')
 const sortByOldestFirst = require('./sortByOldestFirst.js')
@@ -22,8 +23,8 @@ function parseEpisode (episode, podcastName) {
       guid, url, published: published.toISOString(), duration, podcastName, title
     }
   } catch (error) {
-    // console.log('Episode missing a necessary field: '.toUpperCase(), error.message)
-    // console.log(episode)
+    // logger.error('Episode missing a necessary field: '.toUpperCase(), error.message)
+    // logger.error(episode)
     return false
   }
 }
@@ -51,32 +52,9 @@ const fetchFeed = (feed) => {
   return rp(feed.feed)
     .then(processFetchResults)
     .catch(e => {
-      // console.error('VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV')
-      console.error('FAILED FETCHING A FEED FFS', feed.name, e.message)
-      // console.error('ERROR', e.message)
-      // console.error('ΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛΛ')
+      logger.error('FAILED FETCHING A FEED FFS', {feed: feed.name, message: e.message})      
       return false
     })
 }
 
-const getLatestPodcasts = async (feeds, playlist = []) => {
-  const requests = feeds.map(
-    feed => fetchFeed(feed)
-  )
-
-  const episodes = await Promise.all(requests)
-    .then(feedResponses => feedResponses.filter(Boolean))
-    .then(parsedFeeds => [].concat.apply([], parsedFeeds))
-
-  console.error('PODCAST NAMES', episodes.map(episode => episode.podcastName).reduce((names, name) => {
-    if (!names.includes(name)) names.push(name)
-    return names
-  }, [])).join(', ')
-
-  return addNewEpisodes(playlist, episodes.sort(sortByOldestFirst))
-}
-
-module.exports = {
-  getLatestPodcasts,
-  fetchFeed
-}
+module.exports = fetchFeed

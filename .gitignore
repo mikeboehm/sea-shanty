@@ -2,3 +2,7 @@ node_modules/
 /.balena-sync.yml
 .DS_Store
 /tests/assets/writeableFile.json
+/tests/assets/playlist.spec.json
+data/*.json
+/tests/assets/currentEpisode.json
+/tests/assets/episodes.json

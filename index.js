@@ -5,18 +5,17 @@ const SeaShanty = require('./src/SeaShanty')
 const Timer = require('./src/Timer')
 const MPV = require('node-mpv')
 const feeds = require('./etc/feeds')
-const logger = require('./src/Logger')  
+const logger = require('./src/Logger')
 
 logger.info('starting js app')
 
-const moment = require('moment')
 const express = require('express')
 const bodyParser = require('body-parser')
 
 const app = express()
 app.use(bodyParser.json())
 
-const {express: {port}} = require('config')
+const { express: { port } } = require('config')
 
 let phatbeat = require('phatbeat')
 
@@ -37,20 +36,13 @@ const boot = async () => {
     logger.error('SIGINT DETECTED')
     ss.quit()
     process.exit()
-    if (sigintCount > 2) {
-      logger.error('sigintCount')
-      // process.exit()
-    } else {
-      // config.stopProcessing = true
-      // globalEvents.emit('process.stopProcessing')
-    }
   })
 
   app.get('/', (req, res) => res.json(ss.currentEpisode))
   app.post('/playpause', (req, res) => {
     logger.info('API: play/pause')
     ss.togglePause()
-    res.send(ss.mpvState)
+    res.send(ss.playlist.currentEpisode)
   })
 
   app.post('/volup', (req, res) => {
@@ -68,13 +60,13 @@ const boot = async () => {
   app.post('/next', (req, res) => {
     logger.info('API: next')
     ss.next()
-    res.send(ss.mpvState)
+    res.send(ss.playlist.currentEpisode)
   })
 
   app.post('/prev', (req, res) => {
     logger.info('API: prev')
     ss.prev()
-    res.send(ss.mpvState)
+    res.send(ss.playlist.currentEpisode)
   })
 
   app.post('/power', (req, res) => {
@@ -92,7 +84,9 @@ const boot = async () => {
   app.get('/playlist', (req, res) => {
     const { podcastName, title } = ss.playlist.currentEpisode
 
-    const listItems = ss.playlist.episodes
+    const index = ss.playlist.currentPosition
+
+    const listItems = ss.playlist.episodes.slice(index + 1)
       .map(item => `<li>${item.published.slice(0, 10)} - ${item.podcastName} - ${item.title}</li>`)
       .join('')
 

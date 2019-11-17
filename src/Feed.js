@@ -1,6 +1,6 @@
 const { EventEmitter } = require('events')
 const logger = require('./Logger')
-const { fetchFeed } = require('../src/feed/getLatestPodcasts')
+const fetchFeed = require('../src/feed/getLatestPodcasts')
 
 const TWENTYFOUR_HOURS = 24 * 60 * 60 * 1000
 const FORTYEIGHT_HOURS = 48 * 60 * 60 * 1000
