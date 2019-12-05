@@ -133,7 +133,7 @@ class SeaShanty {
     })
 
     this.playTimer.on('started', () => {
-      let brightness = 0.1
+      const brightness = 0.1
       const red = 100
       const green = 0
       const blue = 0

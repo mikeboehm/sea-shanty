@@ -2,7 +2,8 @@
 
 module.exports = (now) => {
   return [
-    { guid: 'b9a91b52-98c9-4f8a-a071-9b082478c8e7',
+    {
+      guid: 'b9a91b52-98c9-4f8a-a071-9b082478c8e7',
       url:
     'https://first.mp3',
       published: now.clone().subtract(3, 'days'),

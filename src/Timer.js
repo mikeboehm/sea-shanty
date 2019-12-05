@@ -12,7 +12,7 @@ class Timer extends EventEmitter {
   }
 
   start (duration) {
-    let startedAt = moment()
+    const startedAt = moment()
     this.emit('started', {
       startedAt,
       duration

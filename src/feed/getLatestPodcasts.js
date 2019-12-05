@@ -3,8 +3,8 @@ const podcastParser = require('node-podcast-parser')
 const rp = require('request-promise-native')
 const logger = require('../Logger')
 
-const addNewEpisodes = require('./addNewEpisodes')
-const sortByOldestFirst = require('./sortByOldestFirst.js')
+// const addNewEpisodes = require('./addNewEpisodes')
+// const sortByOldestFirst = require('./sortByOldestFirst.js')
 
 function parseEpisode (episode, podcastName) {
   try {
@@ -52,7 +52,7 @@ const fetchFeed = (feed) => {
   return rp(feed.feed)
     .then(processFetchResults)
     .catch(e => {
-      logger.error('FAILED FETCHING A FEED FFS', {feed: feed.name, message: e.message})      
+      logger.error('FAILED FETCHING A FEED FFS', { feed: feed.name, message: e.message })
       return false
     })
 }

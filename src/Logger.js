@@ -34,7 +34,7 @@ const logger = types.reduce((logger, type) => {
     const func = callSite.getFunctionName()
     const line = callSite.getLineNumber()
 
-    winston.log(type, message, {...data, caller, func, line})
+    winston.log(type, message, { ...data, caller, func, line })
   }
 
   return logger

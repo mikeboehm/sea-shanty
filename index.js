@@ -17,12 +17,12 @@ app.use(bodyParser.json())
 
 const { express: { port } } = require('config')
 
-let phatbeat = require('phatbeat')
+const phatbeat = require('phatbeat')
 
 const boot = async () => {
   const mpvPlayer = new MPV({
-    'audio_only': true,
-    'debug': false
+    audio_only: true,
+    debug: false
     // 'ipc_command': '--input-ipc-server',
     // "verbose": true,
   })
@@ -42,7 +42,7 @@ const boot = async () => {
     logger.info('/ (root)')
     res.json(ss.currentEpisode)
   })
-  
+
   app.post('/playpause', (req, res) => {
     logger.info('API: play/pause')
     ss.togglePause()

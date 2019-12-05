@@ -6,6 +6,25 @@ const { data: { currentEpisodePath, episodesPath } } = require('config')
 const createDataRecorder = require('./dataRecorder')
 const { read, update } = createDataRecorder(currentEpisodePath)
 const { read: readEpisodes, update: updateEpisodes } = createDataRecorder(episodesPath)
+
+/**
+ * Playlist knows what is currently playing
+ * - the current track is the head of the playlist
+ * Playlist can refresh feeds
+ * - is instantiated with feeds
+ * - refreshes each feeds regularly
+ *  - daily
+ * - new episodes are added to the end
+ *  - the purpose is to never run out of tracks
+ *  - how can we figure out if a track has been played before (and is no longer on the list)?
+ *    - Compare date to head
+ *    - scan backwards for episodes
+ *    - add new episodes to the tail of the playlist
+ * Playlist can provide next track
+ *
+ * What if we sorted by date every time we added new episodes?
+ * - Because what's currently playing is removed from the playlist, it won't affect what's next
+ */
 class Playlist {
   constructor (feeds) {
     feeds.map(feed => new Feed(feed))
