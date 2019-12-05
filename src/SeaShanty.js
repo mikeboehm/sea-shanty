@@ -211,6 +211,11 @@ class SeaShanty {
   _playNext () {
     const nextEpisode = this.playlist.next()
 
+    if (!nextEpisode) {
+      logger.error('No more episodes')
+      return false
+    }
+
     this.currentEpisode = nextEpisode
     this.currentEpisode.timeposition = 0
 
