@@ -22,7 +22,7 @@
     "assert": "^2.0.0",
     "callsite": "^1.0.0",
     "config": "^3.2.4",
-    "express": "^4.16.4",
+    "express": "^4.17.3",
     "jest": "^24.0.0",
     "moment": "^2.24.0",
     "node-mpv": "^1.4.3",
